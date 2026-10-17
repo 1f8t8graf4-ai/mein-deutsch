@@ -1,0 +1,432 @@
+[
+{
+ "id": "du-form",
+ "title": "Вопросы на «ты»: глагол на -st",
+ "short": "С du глагол почти всегда кончается на -st: du wohnst, du arbeitest, du bist.",
+ "lvl": "A1",
+ "tags": ["глаголы", "вопросы", "A1"],
+ "table": {"h": ["", "wohnen", "arbeiten", "lesen", "sein"], "r": [
+   ["ich", "wohne", "arbeite", "lese", "bin"],
+   ["du", "wohnst", "arbeitest", "liest", "bist"],
+   ["er / sie", "wohnt", "arbeitet", "liest", "ist"]]},
+ "when": [
+   "Окончание -st у du — у всех глаголов, без исключений.",
+   "Основа на -t или -d (arbeiten, finden) — вставляем -e-: du arbeitest, du findest.",
+   "Основа на -s, -ß, -z (lesen, heißen, tanzen) — только -t: du liest, du heißt.",
+   "Вопрос со словом «где, что, как»: вопросительное слово → глагол → du. Wo wohnst du?",
+   "Вопрос «да / нет»: глагол первым. Bist du berufstätig?"],
+ "ex": [
+   ["Bist du berufstätig?", "Ты работаешь?"],
+   ["Wo wohnst du?", "Где ты живёшь?"],
+   ["Bei welcher Firma arbeitest du?", "В какой фирме ты работаешь?"],
+   ["Wie heißt du?", "Как тебя зовут?"],
+   ["Welches Buch liest du gerade?", "Какую книгу ты сейчас читаешь?"],
+   ["Was machst du gern mit Freunden?", "Что ты любишь делать с друзьями?", {"x": [["machst gern", "etwas gern machen", "любить что-то делать"]]}],
+   ["Hast du heute Zeit?", "У тебя сегодня есть время?", {"x": [["hast Zeit", "Zeit haben", "иметь время, быть свободным"]]}],
+   ["Fährst du morgen nach Berlin?", "Ты завтра едешь в Берлин?"]],
+ "mistakes": [
+   ["Bei welche Firma arbeiten du?", "Bei welcher Firma arbeitest du?", "у глагола для du — -st; после bei — Dativ (welcher)"],
+   ["Wo du wohnst?", "Wo wohnst du?", "в вопросе глагол сразу после вопросительного слова"],
+   ["Wie heißest du?", "Wie heißt du?", "основа на -ß — только -t"]],
+ "quiz": [
+   {"t": "pick", "q": "Wo ___ du?", "o": ["wohnst", "wohnt", "wohnen"], "a": 0, "ru": "Где ты живёшь?", "w": "du → -st"},
+   {"t": "pick", "q": "Bei welcher Firma ___ du?", "o": ["arbeitst", "arbeitest", "arbeitet"], "a": 1, "ru": "В какой фирме ты работаешь?", "w": "основа на -t → вставляем -e-: arbeitest"},
+   {"t": "pick", "q": "Welches Buch ___ du gerade?", "o": ["lest", "lesest", "liest"], "a": 2, "ru": "Какую книгу ты сейчас читаешь?", "w": "lesen: e → ie, после s только -t"},
+   {"t": "pick", "q": "___ du berufstätig?", "o": ["Bist", "Ist", "Bin"], "a": 0, "ru": "Ты работаешь?", "w": "sein: du bist"},
+   {"t": "build", "de": "Was machst du am Abend?", "ru": "Что ты делаешь вечером?"},
+   {"t": "err", "q": "Wie heißest du?", "bad": "heißest", "fix": "heißt", "w": "основа на -ß — только -t"}]
+},
+{
+ "id": "dativ",
+ "title": "mit, bei, in + Dativ: deiner, welcher",
+ "short": "После mit, bei, aus, nach, seit, von, zu — всегда Dativ. После in — Dativ, когда «где?».",
+ "lvl": "A2",
+ "tags": ["падежи", "предлоги", "Dativ", "A2"],
+ "table": {"h": ["Род", "кто? (Nominativ)", "с кем? где? (Dativ)"], "r": [
+   ["der (м.)", "mein Freund", "mit meinem Freund"],
+   ["die (ж.)", "meine Arbeit", "mit meiner Arbeit"],
+   ["das (ср.)", "mein Kind", "mit meinem Kind"],
+   ["мн. ч.", "meine Freunde", "mit meinen Freunden"]]},
+ "when": [
+   "Семь предлогов, после которых ВСЕГДА Dativ: aus, bei, mit, nach, seit, von, zu.",
+   "Окончания Dativ: мужской и средний -em, женский -er, множественное -en (и -n у самого слова: Freunden).",
+   "welch- склоняется так же: bei welchem Chef, bei welcher Firma.",
+   "in + Dativ — когда спрашиваешь «где?»: in meiner Freizeit, in der Stadt. Про «куда?» — отдельное правило."],
+ "ex": [
+   ["Bist du mit deiner Arbeit zufrieden?", "Ты доволен своей работой?", {"x": [["mit zufrieden", "mit etwas zufrieden sein", "быть довольным чем-то"]]}],
+   ["Ich arbeite bei einer großen Firma.", "Я работаю в большой фирме."],
+   ["In meiner Freizeit spiele ich Fußball.", "В свободное время я играю в футбол."],
+   ["Ich gehe mit meinen Freunden spazieren.", "Я гуляю с друзьями.", {"x": [["gehe spazieren", "spazieren gehen", "гулять"]]}],
+   ["Er wohnt bei seinen Eltern.", "Он живёт у родителей."],
+   ["Nach der Arbeit gehe ich nach Hause.", "После работы я иду домой.", {"x": [["nach Hause", "nach Hause", "домой"]]}],
+   ["Seit einem Jahr lerne ich Deutsch.", "Я учу немецкий уже год."],
+   ["Ich fahre mit dem Bus zur Arbeit.", "Я езжу на работу на автобусе.", {"g": {"zur": "на (= zu der) — к, на"}}]],
+ "mistakes": [
+   ["mit deine Arbeit", "mit deiner Arbeit", "mit → Dativ, женский род → -er"],
+   ["bei welche Firma", "bei welcher Firma", "bei → Dativ"],
+   ["mit meine Freunde", "mit meinen Freunden", "множественное в Dativ: -en и -n у слова"]],
+ "quiz": [
+   {"t": "pick", "q": "Bist du mit ___ Arbeit zufrieden?", "o": ["deine", "deiner", "deinem"], "a": 1, "ru": "Ты доволен своей работой?", "w": "mit + Dativ, die Arbeit → deiner"},
+   {"t": "pick", "q": "Bei ___ Firma arbeitest du?", "o": ["welche", "welcher", "welchem"], "a": 1, "ru": "В какой фирме ты работаешь?", "w": "bei + Dativ, die Firma → welcher"},
+   {"t": "pick", "q": "Ich wohne bei ___ Eltern.", "o": ["meine", "meinen", "meiner"], "a": 1, "ru": "Я живу у родителей.", "w": "множественное в Dativ → meinen"},
+   {"t": "pick", "q": "Ich fahre mit ___ Bus.", "o": ["der", "dem", "den"], "a": 1, "ru": "Я еду на автобусе.", "w": "der Bus → Dativ dem"},
+   {"t": "build", "de": "Ich gehe mit meinen Freunden spazieren.", "ru": "Я гуляю с друзьями."},
+   {"t": "err", "q": "Ich spreche mit meine Mutter.", "bad": "meine", "fix": "meiner", "w": "mit + Dativ, die Mutter → meiner"}]
+},
+{
+ "id": "reflexiv",
+ "title": "Возвратные глаголы: sich interessieren für",
+ "short": "sich interessieren = «интересоваться». sich меняется: ich → mich, du → dich. «sein» не нужен.",
+ "lvl": "A2",
+ "tags": ["глаголы", "местоимения", "A2"],
+ "table": {"h": ["", "sich interessieren für"], "r": [
+   ["ich", "interessiere mich"],
+   ["du", "interessierst dich"],
+   ["er / sie / es", "interessiert sich"],
+   ["wir", "interessieren uns"],
+   ["ihr", "interessiert euch"],
+   ["sie / Sie", "interessieren sich"]]},
+ "when": [
+   "Если в русском «-ся / -сь» (интересоваться, радоваться, злиться) — в немецком часто есть sich.",
+   "sich interessieren für + Akkusativ: für Filme, für den Sport, für die Musik.",
+   "Вопрос: Wofür interessierst du dich? (wofür — «чем, за что»).",
+   "Похожие: sich freuen (радоваться), sich ärgern (злиться), sich treffen (встречаться)."],
+ "ex": [
+   ["Wofür interessierst du dich?", "Чем ты интересуешься?", {"x": [["interessierst dich wofür", "sich interessieren für", "интересоваться чем-то"]]}],
+   ["Ich interessiere mich für Filme.", "Я интересуюсь фильмами.", {"x": [["interessiere mich für", "sich interessieren für", "интересоваться чем-то"]]}],
+   ["Er interessiert sich für Fußball.", "Он интересуется футболом.", {"x": [["interessiert sich für", "sich interessieren für", "интересоваться чем-то"]]}],
+   ["Ich freue mich auf das Wochenende.", "Я жду выходных (радуюсь им заранее).", {"x": [["freue mich auf", "sich freuen auf + Akk", "радоваться заранее, ждать"]]}],
+   ["Ich ärgere mich über den Bus.", "Я злюсь на автобус.", {"x": [["ärgere mich über", "sich ärgern über + Akk", "злиться на что-то"]]}],
+   ["Wir treffen uns um acht.", "Мы встречаемся в восемь.", {"x": [["treffen uns", "sich treffen", "встречаться"]]}],
+   ["Das hat mich wirklich geärgert.", "Это меня реально разозлило.", {"x": [["hat geärgert", "ärgern (Perfekt)", "разозлить"]]}]],
+ "mistakes": [
+   ["Wofür bist du sich interessiert?", "Wofür interessierst du dich?", "sein не нужен; для du — dich"],
+   ["Ich interessiere für Filme.", "Ich interessiere mich für Filme.", "без mich нельзя"]],
+ "quiz": [
+   {"t": "pick", "q": "Wofür interessierst du ___?", "o": ["sich", "dich", "mich"], "a": 1, "ru": "Чем ты интересуешься?", "w": "du → dich"},
+   {"t": "pick", "q": "Ich interessiere ___ für Musik.", "o": ["mich", "dich", "sich"], "a": 0, "ru": "Я интересуюсь музыкой.", "w": "ich → mich"},
+   {"t": "pick", "q": "Er interessiert ___ für Autos.", "o": ["ihn", "sich", "mich"], "a": 1, "ru": "Он интересуется машинами.", "w": "er → sich"},
+   {"t": "mean", "q": "sich ärgern", "o": ["злиться", "радоваться", "встречаться"], "a": 0},
+   {"t": "build", "de": "Ich interessiere mich für Filme.", "ru": "Я интересуюсь фильмами."},
+   {"t": "err", "q": "Wofür interessierst du sich?", "bad": "sich", "fix": "dich", "w": "du → dich"}]
+},
+{
+ "id": "perfekt",
+ "title": "Perfekt: haben / sein + ge…t, ge…en",
+ "short": "Perfekt = haben или sein на 2-м месте + Partizip II в самом конце: Ich habe Pizza gekauft.",
+ "lvl": "A2",
+ "tags": ["время", "глаголы", "A2"],
+ "table": {"h": ["Тип глагола", "Как", "Пример"], "r": [
+   ["регулярный", "ge + основа + t", "machen → gemacht"],
+   ["нерегулярный", "ge + основа + en (гласная может меняться)", "lesen → gelesen, trinken → getrunken"],
+   ["на ver-, be-, ent-, er-", "без ge-", "verpassen → verpasst, verschlafen → verschlafen"],
+   ["на -ieren", "без ge-", "studieren → studiert"],
+   ["с отделяемой приставкой (an-, ab-…)", "ge — в середину", "anfangen → angefangen, abholen → abgeholt"]]},
+ "when": [
+   "О прошлом в разговоре — почти всегда Perfekt.",
+   "Обычно с haben. С sein — движение (fahren, gehen, kommen), смена состояния (aufstehen, einschlafen), а также sein и bleiben.",
+   "haben / sein — на 2-м месте, Partizip — в самом конце предложения.",
+   "Вопрос о прошлом: Was hast du am Wochenende gemacht?"],
+ "ex": [
+   ["Was hast du am Wochenende gemacht?", "Что ты делал на выходных?", {"x": [["hast gemacht", "machen (Perfekt)", "делать"]]}],
+   ["Ich habe einen Film gesehen.", "Я посмотрел фильм.", {"x": [["habe gesehen", "sehen (Perfekt)", "видеть, смотреть"]]}],
+   ["Ich habe den Wecker nicht gehört.", "Я не услышал будильник.", {"x": [["habe gehört", "hören (Perfekt)", "слышать"]]}],
+   ["Ich habe verschlafen.", "Я проспал.", {"x": [["habe verschlafen", "verschlafen (Perfekt)", "проспать"]]}],
+   ["Dann habe ich den Bus verpasst.", "Потом я опоздал на автобус.", {"x": [["habe verpasst", "verpassen (Perfekt)", "пропустить, опоздать на"]]}],
+   ["Wir sind nach Hamburg gefahren.", "Мы съездили в Гамбург.", {"x": [["sind gefahren", "fahren (Perfekt с sein)", "ехать"]]}],
+   ["Heute hat mein Deutschkurs angefangen.", "Сегодня начался мой курс немецкого.", {"x": [["hat angefangen", "anfangen (Perfekt)", "начинаться"]]}],
+   ["Mein Mann hat die Kinder abgeholt.", "Муж забрал детей.", {"x": [["hat abgeholt", "abholen (Perfekt)", "забирать"]]}]],
+ "mistakes": [
+   ["Was machst du am Wochenende? (о прошлых выходных)", "Was hast du am Wochenende gemacht?", "о прошлом — Perfekt"],
+   ["Ich habe den Bus geverpasst.", "Ich habe den Bus verpasst.", "ver- — без ge-"],
+   ["Ich habe nach Berlin gefahren.", "Ich bin nach Berlin gefahren.", "движение — с sein"]],
+ "quiz": [
+   {"t": "pick", "q": "Was ___ du am Wochenende gemacht?", "o": ["hast", "bist", "hat"], "a": 0, "ru": "Что ты делал на выходных?", "w": "machen — с haben, du hast"},
+   {"t": "pick", "q": "Ich habe den Bus ___.", "o": ["geverpasst", "verpasst", "verpassen"], "a": 1, "ru": "Я опоздал на автобус.", "w": "ver- — без ge-"},
+   {"t": "pick", "q": "Wir ___ nach Hamburg gefahren.", "o": ["haben", "sind", "hat"], "a": 1, "ru": "Мы съездили в Гамбург.", "w": "движение — sein"},
+   {"t": "pick", "q": "Heute hat mein Kurs ___.", "o": ["angefangen", "geanfangen", "anfangen"], "a": 0, "ru": "Сегодня начался мой курс.", "w": "отделяемая приставка: an-ge-fangen"},
+   {"t": "build", "de": "Ich habe einen Film gesehen.", "ru": "Я посмотрел фильм."},
+   {"t": "err", "q": "Ich habe den Wecker nicht gehören.", "bad": "gehören", "fix": "gehört", "w": "hören → gehört (ge…t в конце)"}]
+},
+{
+ "id": "verben",
+ "title": "Регулярные и нерегулярные глаголы",
+ "short": "Регулярные живут по шаблону (machen → gemacht). Нерегулярные меняют гласную (fahren → fährt → gefahren) — их учат тройками.",
+ "lvl": "A2",
+ "tags": ["глаголы", "время", "A2"],
+ "table": {"h": ["", "machen (рег.)", "fahren (нерег.)", "lesen (нерег.)"], "r": [
+   ["du", "machst", "fährst", "liest"],
+   ["er / sie", "macht", "fährt", "liest"],
+   ["Präteritum", "machte", "fuhr", "las"],
+   ["Perfekt", "hat gemacht", "ist gefahren", "hat gelesen"]]},
+ "when": [
+   "Окончания в настоящем времени у всех одинаковые: -e, -st, -t, -en.",
+   "У нерегулярных у du и er / sie может меняться гласная: a → ä (fahren → du fährst), e → i / ie (sprechen → du sprichst, lesen → du liest).",
+   "Partizip: регулярные — ge…t, нерегулярные — ge…en.",
+   "Правила, как угадать, нет. Базовые глаголы (есть, пить, спать, ехать, читать, видеть) почти всегда нерегулярные.",
+   "Учи тройкой: fahren – fährt – gefahren."],
+ "ex": [
+   ["Du fährst zu schnell.", "Ты едешь слишком быстро."],
+   ["Er spricht gut Deutsch.", "Он хорошо говорит по-немецки."],
+   ["Sie schläft noch.", "Она ещё спит.", {"g": {"sie": "она"}}],
+   ["Ich habe Kaffee getrunken.", "Я выпил кофе.", {"x": [["habe getrunken", "trinken (Perfekt)", "пить"]]}],
+   ["Wir haben Pizza gekauft.", "Мы купили пиццу.", {"x": [["haben gekauft", "kaufen (Perfekt)", "покупать"]]}],
+   ["Hast du das Buch gelesen?", "Ты прочитал книгу?", {"x": [["hast gelesen", "lesen (Perfekt)", "читать"]]}],
+   ["Was isst du zum Frühstück?", "Что ты ешь на завтрак?"]],
+ "mistakes": [
+   ["du fahrst", "du fährst", "a → ä у du и er"],
+   ["Ich habe getrinkt.", "Ich habe getrunken.", "нерегулярный: ge…en и другая гласная"],
+   ["Er sprecht.", "Er spricht.", "e → i у du и er"]],
+ "quiz": [
+   {"t": "pick", "q": "Du ___ zu schnell.", "o": ["fahrst", "fährst", "fahrt"], "a": 1, "ru": "Ты едешь слишком быстро.", "w": "a → ä у du"},
+   {"t": "pick", "q": "Er ___ gut Deutsch.", "o": ["sprecht", "spricht", "sprichst"], "a": 1, "ru": "Он хорошо говорит по-немецки.", "w": "e → i у er"},
+   {"t": "pick", "q": "Ich habe Kaffee ___.", "o": ["getrinkt", "getrunken", "trinkt"], "a": 1, "ru": "Я выпил кофе.", "w": "trinken — нерегулярный: getrunken"},
+   {"t": "pick", "q": "Wir haben Pizza ___.", "o": ["gekauft", "gekaufen", "kauft"], "a": 0, "ru": "Мы купили пиццу.", "w": "kaufen — регулярный: ge…t"},
+   {"t": "mean", "q": "Какой глагол нерегулярный?", "o": ["machen", "kaufen", "schlafen"], "a": 2, "w": "schlafen – schläft – geschlafen"},
+   {"t": "err", "q": "Sie schlaft noch.", "bad": "schlaft", "fix": "schläft", "w": "a → ä у er / sie"}]
+},
+{
+ "id": "ist-sind",
+ "title": "ist или sind: смотри на подлежащее",
+ "short": "Глагол смотрит на подлежащее. Mein Lieblingsfilm (один) → ist. Meine Lieblingsfilme (много) → sind.",
+ "lvl": "A1",
+ "tags": ["глаголы", "A1"],
+ "table": {"h": ["Подлежащее", "Глагол", "Пример"], "r": [
+   ["одно (er / sie / es)", "ist", "Mein Lieblingsfilm ist „Taxi Driver“."],
+   ["много (sie)", "sind", "Meine Lieblingsfilme sind „Titanic“ und „Der Pate“."]]},
+ "when": [
+   "Даже если название фильма во множественном числе — фильм один, значит ist.",
+   "Во множественном числе меняются и mein → meine, и само слово: Film → Filme.",
+   "Можно сказать через heißen: Mein Lieblingsfilm heißt …"],
+ "ex": [
+   ["Mein Lieblingsfilm ist „Taxi Driver“.", "Мой любимый фильм — «Таксист»."],
+   ["Meine Lieblingsfilme sind „Titanic“ und „Der Pate“.", "Мои любимые фильмы — «Титаник» и «Крёстный отец»."],
+   ["Mein Lieblingsfilm heißt „Der Herr der Ringe“.", "Мой любимый фильм называется «Властелин колец»."],
+   ["Meine Lieblingsserie ist „Breaking Bad“.", "Мой любимый сериал — «Во все тяжкие»."],
+   ["Mein Lieblingsessen ist Pizza.", "Моя любимая еда — пицца."],
+   ["Meine Freunde sind sehr nett.", "Мои друзья очень милые."]],
+ "mistakes": [
+   ["Mein Lieblingsfilme sind …", "Meine Lieblingsfilme sind …", "множественное: meine + Filme"],
+   ["Mein Lieblingsfilm sind „Die Tribute von Panem“.", "Mein Lieblingsfilm ist „Die Tribute von Panem“.", "фильм один → ist"]],
+ "quiz": [
+   {"t": "pick", "q": "Mein Lieblingsfilm ___ „Titanic“.", "o": ["ist", "sind", "bin"], "a": 0, "ru": "Мой любимый фильм — «Титаник».", "w": "один фильм → ist"},
+   {"t": "pick", "q": "Meine Lieblingsfilme ___ „Titanic“ und „Der Pate“.", "o": ["ist", "sind"], "a": 1, "ru": "Мои любимые фильмы — «Титаник» и «Крёстный отец».", "w": "много → sind"},
+   {"t": "pick", "q": "___ Freunde sind sehr nett.", "o": ["Mein", "Meine", "Meinen"], "a": 1, "ru": "Мои друзья очень милые.", "w": "множественное → meine"},
+   {"t": "build", "de": "Mein Lieblingsessen ist Pizza.", "ru": "Моя любимая еда — пицца."},
+   {"t": "err", "q": "Meine Freunde ist sehr nett.", "bad": "ist", "fix": "sind", "w": "друзей много → sind"}]
+},
+{
+ "id": "titel",
+ "title": "Названия фильмов и фирм",
+ "short": "Фильм называй так, как он шёл в Германии: многие голливудские — по-английски. Фирму — как она называется, без перевода.",
+ "lvl": "A2",
+ "tags": ["стиль", "произношение", "A2"],
+ "table": {"h": ["Оригинал", "В Германии"], "r": [
+   ["Taxi Driver", "Taxi Driver"],
+   ["The Wolf of Wall Street", "The Wolf of Wall Street"],
+   ["Titanic", "Titanic"],
+   ["The Godfather", "Der Pate"],
+   ["Back to the Future", "Zurück in die Zukunft"],
+   ["The Lord of the Rings", "Der Herr der Ringe"],
+   ["Home Alone", "Kevin – Allein zu Haus"]]},
+ "when": [
+   "Не знаешь немецкое название — говори оригинальное, тебя поймут.",
+   "В письме — в немецких кавычках „…“ (нижняя открывающая, верхняя закрывающая).",
+   "Названия фирм не переводят: Ich arbeite bei Pierce & Pierce. «&» в английском названии читают «энд», в немецких — «унд» (H&M — «Ха унд Эм»).",
+   "Имена — как в оригинале: Robert De Niro, а не Roberto."],
+ "ex": [
+   ["Mein Lieblingsfilm ist „Taxi Driver“ mit Robert De Niro.", "Мой любимый фильм — «Таксист» с Робертом Де Ниро."],
+   ["Kennst du „Der Pate“?", "Ты знаешь «Крёстного отца»?"],
+   ["Ich arbeite bei Pierce & Pierce.", "Я работаю в Pierce & Pierce."],
+   ["Hast du „Zurück in die Zukunft“ gesehen?", "Ты смотрел «Назад в будущее»?", {"x": [["hast gesehen", "sehen (Perfekt)", "видеть, смотреть"]]}],
+   ["Ich kaufe meine Kleidung bei H&M.", "Я покупаю одежду в H&M."],
+   ["„Titanic“ habe ich dreimal gesehen.", "«Титаник» я смотрел три раза.", {"x": [["habe gesehen", "sehen (Perfekt)", "видеть, смотреть"]]}]],
+ "mistakes": [
+   ["Mein Lieblingsfilm ist Taxifahrer.", "Mein Lieblingsfilm ist „Taxi Driver“.", "в Германии фильм шёл под английским названием"],
+   ["Roberto de Niro", "Robert De Niro", "имя как в оригинале"]],
+ "quiz": [
+   {"t": "mean", "q": "Der Pate", "o": ["Крёстный отец", "Властелин колец", "Таксист"], "a": 0},
+   {"t": "mean", "q": "Der Herr der Ringe", "o": ["Назад в будущее", "Властелин колец", "Один дома"], "a": 1},
+   {"t": "pick", "q": "H&M читается: Ha ___ Em", "o": ["und", "and"], "a": 0, "w": "немецкая фирма → «унд»"},
+   {"t": "pick", "q": "Mein Lieblingsfilm ist „Taxi Driver“ mit Robert ___ Niro.", "o": ["de", "De"], "a": 1, "w": "имя как в оригинале: De Niro"},
+   {"t": "build", "de": "Kennst du „Der Pate“?", "ru": "Ты знаешь «Крёстного отца»?"}]
+},
+{
+ "id": "beruf",
+ "title": "Профессия без артикля: Ich bin Lehrer",
+ "short": "Профессию говорят без артикля: Ich bin Lehrer. Ich bin Investmentbanker.",
+ "lvl": "A1",
+ "tags": ["артикли", "работа", "A1"],
+ "table": {"h": ["Так", "Не так"], "r": [
+   ["Ich bin Lehrer.", "Ich bin ein Lehrer."],
+   ["Sie ist Ärztin.", "Sie ist eine Ärztin."],
+   ["Ich arbeite als Koch.", "Ich arbeite als ein Koch."]]},
+ "when": [
+   "После sein и werden с профессией — без артикля: Ich werde Arzt.",
+   "Женская форма — +in: Lehrer → Lehrerin, Arzt → Ärztin.",
+   "С прилагательным артикль возвращается: Er ist ein guter Lehrer.",
+   "Где работаешь — bei + фирма: Ich arbeite bei Siemens. Кем — als: Ich arbeite als Koch."],
+ "ex": [
+   ["Ich bin Investmentbanker.", "Я инвестиционный банкир."],
+   ["Ich arbeite als Kellner.", "Я работаю официантом."],
+   ["Sie ist Ärztin.", "Она врач.", {"g": {"sie": "она"}}],
+   ["Er ist ein guter Lehrer.", "Он хороший учитель."],
+   ["Was bist du von Beruf?", "Кто ты по профессии?", {"x": [["von Beruf", "von Beruf", "по профессии"]]}],
+   ["Ich arbeite bei Pierce & Pierce in der Abteilung für Fusionen und Übernahmen.", "Я работаю в Pierce & Pierce, в отделе слияний и поглощений."],
+   ["Bist du berufstätig?", "Ты работаешь?"]],
+ "mistakes": [
+   ["Ich bin ein Investmentbanker.", "Ich bin Investmentbanker.", "профессия без артикля"],
+   ["Sie ist Arzt.", "Sie ist Ärztin.", "женщина → +in"]],
+ "quiz": [
+   {"t": "pick", "q": "Ich bin ___ Lehrer.", "o": ["ein", "(ничего)", "der"], "a": 1, "ru": "Я учитель.", "w": "профессия без артикля"},
+   {"t": "pick", "q": "Sie ist ___.", "o": ["Arzt", "Ärztin", "Arztin"], "a": 1, "ru": "Она врач.", "w": "женщина → Ärztin"},
+   {"t": "pick", "q": "Er ist ___ guter Koch.", "o": ["(ничего)", "ein", "eine"], "a": 1, "ru": "Он хороший повар.", "w": "с прилагательным — артикль есть"},
+   {"t": "pick", "q": "Ich arbeite ___ Kellnerin.", "o": ["als", "bei", "wie"], "a": 0, "ru": "Я работаю официанткой.", "w": "кем — als"},
+   {"t": "build", "de": "Was bist du von Beruf?", "ru": "Кто ты по профессии?"},
+   {"t": "err", "q": "Ich bin ein Investmentbanker.", "bad": "ein", "fix": "(убрать)", "w": "профессия без артикля"}]
+},
+{
+ "id": "verb-2",
+ "title": "Глагол на 2-м месте; und / oder не считаются",
+ "short": "В обычном предложении глагол всегда на 2-м месте. und, oder, aber, denn места не занимают.",
+ "lvl": "A2",
+ "tags": ["порядок слов", "союзы", "A2"],
+ "table": {"h": ["1-е место", "2-е место", "дальше"], "r": [
+   ["Ich", "spaziere", "mit Freunden."],
+   ["In meiner Freizeit", "spaziere", "ich mit Freunden."],
+   ["Heute", "fahre", "ich nach Berlin."],
+   ["(oder) ich", "fahre", "in eine andere Stadt."]]},
+ "when": [
+   "На 1-м месте может стоять что угодно: я, сегодня, в свободное время, целое придаточное. Подлежащее тогда уходит за глагол.",
+   "und, oder, aber, denn, sondern — «нулевое место»: после них снова обычный порядок.",
+   "Если подлежащее то же — после und / oder его можно не повторять: Ich gehe spazieren oder fahre in die Stadt.",
+   "Разговорное: spazieren gehen — Ich gehe mit Freunden spazieren."],
+ "ex": [
+   ["In meiner Freizeit spaziere ich mit meinen Freunden.", "В свободное время я гуляю с друзьями."],
+   ["In meiner Freizeit gehe ich mit Freunden spazieren oder ich fahre in eine andere Stadt.", "В свободное время я гуляю с друзьями или езжу в другой город.", {"x": [["gehe spazieren", "spazieren gehen", "гулять"]]}],
+   ["Heute habe ich keine Zeit.", "Сегодня у меня нет времени."],
+   ["Am Wochenende schlafe ich lange.", "На выходных я долго сплю."],
+   ["Ich bin müde, aber ich gehe ins Kino.", "Я устал, но иду в кино."],
+   ["Ich bleibe zu Hause oder ich gehe in die Stadt.", "Я останусь дома или пойду в город.", {"x": [["zu Hause", "zu Hause", "дома"]]}],
+   ["Morgen fahre ich nach Hamburg.", "Завтра я еду в Гамбург."]],
+ "mistakes": [
+   ["… oder fahre ich in eine andere Stadt.", "… oder ich fahre in eine andere Stadt.", "oder места не занимает"],
+   ["Heute ich habe keine Zeit.", "Heute habe ich keine Zeit.", "глагол — второй"]],
+ "quiz": [
+   {"t": "pick", "q": "Heute ___ keine Zeit.", "o": ["ich habe", "habe ich"], "a": 1, "ru": "Сегодня у меня нет времени.", "w": "Heute — 1-е место, глагол второй"},
+   {"t": "pick", "q": "Ich bin müde, aber ___ ins Kino.", "o": ["gehe ich", "ich gehe"], "a": 1, "ru": "Я устал, но иду в кино.", "w": "aber места не занимает"},
+   {"t": "pick", "q": "Morgen ___ nach Hamburg.", "o": ["fahre ich", "ich fahre"], "a": 0, "ru": "Завтра я еду в Гамбург.", "w": "Morgen — 1-е место"},
+   {"t": "build", "de": "Am Wochenende schlafe ich lange.", "ru": "На выходных я долго сплю."},
+   {"t": "build", "de": "In meiner Freizeit spiele ich Fußball.", "ru": "В свободное время я играю в футбол."}]
+},
+{
+ "id": "wohin-wo",
+ "title": "in eine andere Stadt / in einer anderen Stadt: куда и где",
+ "short": "in + куда? → Akkusativ: in eine andere Stadt. in + где? → Dativ: in einer anderen Stadt.",
+ "lvl": "A2",
+ "tags": ["падежи", "предлоги", "прилагательные", "A2"],
+ "table": {"h": ["", "куда? (Akkusativ)", "где? (Dativ)"], "r": [
+   ["die Stadt (ж.)", "in eine andere Stadt", "in einer anderen Stadt"],
+   ["der Park (м.)", "in den Park", "im (= in dem) Park"],
+   ["das Kino (ср.)", "ins (= in das) Kino", "im Kino"]]},
+ "when": [
+   "Глаголы движения (fahren, gehen, fliegen) → «куда?» → Akkusativ.",
+   "wohnen, sein, arbeiten, bleiben → «где?» → Dativ.",
+   "Женский род в Akkusativ — как в Nominativ: die / eine / andere.",
+   "Женский род в Dativ: der / einer, у прилагательного -en: einer anderen.",
+   "Так же работают an, auf, über, unter, vor, hinter, neben, zwischen."],
+ "ex": [
+   ["Ich fahre in eine andere Stadt.", "Я еду в другой город."],
+   ["Ich wohne in einer anderen Stadt.", "Я живу в другом городе."],
+   ["Wir gehen ins Kino.", "Мы идём в кино."],
+   ["Wir sind im Kino.", "Мы в кино."],
+   ["Er fährt in den Urlaub.", "Он едет в отпуск."],
+   ["Ich arbeite in einer großen Firma.", "Я работаю в большой фирме."],
+   ["Am Sonntag fahre ich in die Berge.", "В воскресенье я еду в горы."]],
+ "mistakes": [
+   ["in andere Stadt", "in eine andere Stadt", "перед существительным в ед. ч. нужен артикль"],
+   ["in eine anderen Stadt", "in eine andere Stadt", "Akkusativ ж. р. → andere (без -n)"],
+   ["Ich wohne in eine andere Stadt.", "Ich wohne in einer anderen Stadt.", "wohnen → где? → Dativ"]],
+ "quiz": [
+   {"t": "pick", "q": "Ich fahre in ___ andere Stadt.", "o": ["eine", "einer", "einen"], "a": 0, "ru": "Я еду в другой город.", "w": "куда? → Akkusativ: eine"},
+   {"t": "pick", "q": "Ich wohne in einer ___ Stadt.", "o": ["andere", "anderen", "anderer"], "a": 1, "ru": "Я живу в другом городе.", "w": "где? → Dativ: einer anderen"},
+   {"t": "pick", "q": "Wir gehen ___ Kino.", "o": ["im", "ins"], "a": 1, "ru": "Мы идём в кино.", "w": "куда? → ins (= in das)"},
+   {"t": "pick", "q": "Wir sitzen ___ Kino.", "o": ["im", "ins"], "a": 0, "ru": "Мы сидим в кино.", "w": "где? → im (= in dem)"},
+   {"t": "build", "de": "Ich fahre in eine andere Stadt.", "ru": "Я еду в другой город."},
+   {"t": "err", "q": "Ich wohne in eine andere Stadt.", "bad": "eine", "fix": "einer (… anderen)", "w": "wohnen → где? → Dativ"}]
+},
+{
+ "id": "bevor",
+ "title": "bevor / vorher / vor; главная и придаточная часть",
+ "short": "bevor = «перед тем как». После bevor глагол уходит в конец своей части. Это одно предложение из двух частей через запятую.",
+ "lvl": "B1",
+ "tags": ["союзы", "порядок слов", "B1"],
+ "table": {"h": ["Слово", "Что это", "Пример"], "r": [
+   ["bevor", "союз, глагол — в конец", "…, bevor ich gehe."],
+   ["vorher", "наречие «до этого»", "Vorher war ich nervös."],
+   ["vor + Dativ", "предлог «перед»", "vor der Arbeit"]]},
+ "when": [
+   "Главная часть может стоять одна: Ich lese ein Buch. Придаточная — нет: «Bevor ich schlafe.» — недосказано.",
+   "В придаточной (bevor, weil, dass, wenn, als, ob) глагол — в конце.",
+   "Если придаточная стоит первой, она занимает 1-е место → дальше сразу глагол: Bevor ich schlafe, lese ich ein Buch.",
+   "Запятая между частями обязательна.",
+   "Одну мысль можно сказать тремя способами: Bevor ich arbeite, trinke ich Kaffee. / Vor der Arbeit trinke ich Kaffee. / Ich trinke Kaffee. Vorher dusche ich."],
+ "ex": [
+   ["Ich trinke Kaffee, bevor ich zur Arbeit gehe.", "Я пью кофе перед тем, как иду на работу."],
+   ["Bevor ich schlafe, lese ich ein Buch.", "Перед сном я читаю книгу."],
+   ["Bevor ich zur Arbeit gehe, trinke ich Kaffee.", "Перед тем как идти на работу, я пью кофе."],
+   ["Vor der Arbeit trinke ich Kaffee.", "Перед работой я пью кофе."],
+   ["Vorher war ich ganz schön nervös.", "До этого я сильно нервничал.", {"x": [["ganz schön", "ganz schön", "довольно-таки, сильно (разг.)"]]}],
+   ["Bevor du gehst, ruf mich an!", "Перед тем как уйдёшь, позвони мне!", {"x": [["ruf an", "anrufen", "позвонить"]]}],
+   ["Ich lese ein Buch, bevor ich am Abend ein Bier trinke.", "Я читаю книгу, перед тем как вечером выпить пива."]],
+ "mistakes": [
+   ["Bevor ich schlafe, ich lese ein Buch.", "Bevor ich schlafe, lese ich ein Buch.", "придаточная — на 1-м месте, дальше сразу глагол"],
+   ["…, bevor ich gehe zur Arbeit.", "…, bevor ich zur Arbeit gehe.", "после bevor глагол в конец"]],
+ "quiz": [
+   {"t": "pick", "q": "Bevor ich schlafe, ___ ein Buch.", "o": ["lese ich", "ich lese"], "a": 0, "ru": "Перед сном я читаю книгу.", "w": "часть с bevor — на 1-м месте, глагол второй"},
+   {"t": "pick", "q": "Ich trinke Kaffee, bevor ___.", "o": ["ich zur Arbeit gehe", "ich gehe zur Arbeit"], "a": 0, "ru": "Я пью кофе перед тем, как иду на работу.", "w": "после bevor глагол — в конец"},
+   {"t": "pick", "q": "___ der Arbeit trinke ich Kaffee.", "o": ["Bevor", "Vor", "Vorher"], "a": 1, "ru": "Перед работой я пью кофе.", "w": "перед + существительное → vor + Dativ"},
+   {"t": "pick", "q": "Heute war mein erster Tag. ___ war ich nervös.", "o": ["Bevor", "Vor", "Vorher"], "a": 2, "ru": "Сегодня был мой первый день. До этого я нервничал.", "w": "«до этого» — vorher"},
+   {"t": "build", "de": "Bevor ich schlafe, lese ich ein Buch.", "ru": "Перед сном я читаю книгу."}]
+},
+{
+ "id": "gegenteile",
+ "title": "Характер: противоположности",
+ "short": "Многие противоположности = слово + un-: ehrlich ↔ unehrlich. Остальные учи парами.",
+ "lvl": "A2",
+ "tags": ["слова", "прилагательные", "характер", "A2"],
+ "table": {"h": ["Слово", "↔ противоположность"], "r": [
+   ["verschlossen — замкнутый", "offen — открытый"],
+   ["schüchtern — застенчивый", "kontaktfreudig — общительный"],
+   ["zurückhaltend — сдержанный", "offen — открытый"],
+   ["sparsam — экономный", "verschwenderisch — расточительный"],
+   ["großzügig — щедрый", "geizig — жадный"],
+   ["fleißig — трудолюбивый", "faul — ленивый"],
+   ["fröhlich — весёлый", "traurig — грустный"],
+   ["gut gelaunt — в хорошем настроении", "schlecht gelaunt — в плохом настроении"],
+   ["unternehmungslustig — лёгкий на подъём", "lustlos — вялый"],
+   ["intelligent — умный", "dumm — глупый"]]},
+ "when": [
+   "un- работает часто, но не всегда: sportlich ↔ unsportlich, pünktlich ↔ unpünktlich, kompliziert ↔ unkompliziert.",
+   "sparsam (экономный) — скорее похвала; geizig (жадный) — упрёк.",
+   "Пиши умлауты: schüchtern, zurückhaltend, ängstlich — без точек это ошибка.",
+   "Про себя: Ich bin ein bisschen schüchtern."],
+ "ex": [
+   ["Ich bin ein bisschen schüchtern.", "Я немного застенчивый.", {"x": [["ein bisschen", "ein bisschen", "немного"]]}],
+   ["Mein Bruder ist sehr kontaktfreudig.", "Мой брат очень общительный."],
+   ["Sie ist sparsam, aber nicht geizig.", "Она экономная, но не жадная.", {"g": {"sie": "она"}}],
+   ["Er ist großzügig und lädt alle ein.", "Он щедрый и всех угощает.", {"x": [["lädt ein", "einladen", "приглашать, угощать"]]}],
+   ["Am Anfang bin ich zurückhaltend.", "Сначала я сдержанный."],
+   ["Heute bin ich gut gelaunt.", "Сегодня я в хорошем настроении.", {"x": [["gut gelaunt", "gut gelaunt", "в хорошем настроении"]]}]],
+ "mistakes": [
+   ["schüttern", "schüchtern", "внутри ch, а не tt"],
+   ["zuruckhaltend", "zurückhaltend", "zurück — с ü"]],
+ "quiz": [
+   {"t": "mean", "q": "schüchtern", "o": ["застенчивый", "щедрый", "ленивый"], "a": 0},
+   {"t": "mean", "q": "großzügig", "o": ["жадный", "щедрый", "экономный"], "a": 1},
+   {"t": "pick", "q": "Противоположность «ehrlich»: ___", "o": ["unehrlich", "traurig", "faul"], "a": 0, "w": "un- + ehrlich"},
+   {"t": "pick", "q": "Противоположность «fleißig»: ___", "o": ["faul", "geizig", "offen"], "a": 0},
+   {"t": "pick", "q": "Противоположность «verschlossen»: ___", "o": ["offen", "sparsam", "lustlos"], "a": 0},
+   {"t": "err", "q": "Ich bin ein bisschen schuchtern.", "bad": "schuchtern", "fix": "schüchtern", "w": "нужен умлаут ü"}]
+}
+]

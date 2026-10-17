@@ -1,0 +1,13 @@
+[
+{"d": "2026-10-12", "q": "Оцени мои 10 вопросов в Du-форме (Bist du berufstätig? Bei welche Firma arbeiten du? …)", "r": ["du-form", "dativ", "reflexiv", "perfekt"]},
+{"d": "2026-10-12", "q": "Wofür interessierst du dich — так правильно?", "r": ["reflexiv"]},
+{"d": "2026-10-12", "q": "Названия фильмов пишутся на английском или немецком? Mein Lieblingsfilm ist или sind?", "r": ["titel", "ist-sind"]},
+{"d": "2026-10-12", "q": "Mein Lieblingsfilm ist Taxifahrer mit Roberto de Niro — правильно?", "r": ["titel", "ist-sind"]},
+{"d": "2026-10-12", "q": "In meiner Freizeit spaziere ich mit meinen Freunden oder fahre ich in andere Stadt — что не так?", "r": ["verb-2", "wohin-wo", "dativ"]},
+{"d": "2026-10-12", "q": "Anderen? (in eine andere / einer anderen Stadt)", "r": ["wohin-wo"]},
+{"d": "2026-10-13", "q": "Регулярные и нерегулярные глаголы — разница", "r": ["verben", "perfekt"]},
+{"d": "2026-10-13", "q": "Ich arbeite bei Pierce and (или und) Pierce — как писать и как говорить?", "r": ["titel", "beruf"]},
+{"d": "2026-10-13", "q": "verschlossen, schüchtern, zurückhaltend, offen, kontaktfreudig, sparsam, großzügig — противоположности", "r": ["gegenteile"]},
+{"d": "2026-10-13", "q": "Bevor — как использовать?", "r": ["bevor"]},
+{"d": "2026-10-13", "q": "Почему во втором примере lese не ушёл в конец? Предложение полное или две части через запятую?", "r": ["bevor", "verb-2"]}
+]

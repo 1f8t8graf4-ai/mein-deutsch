@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Мой немецкий</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  // Версия: поднимать при каждом релизе (сбивает кэш)
+  var V = '1.0';
+  // Адрес воркера бота (без / в конце). Пусто — бот ещё не подключён, напоминание хранится только тут.
+  window.MD_API = 'https://mein-deutsch-bot.1f8t8graf4.workers.dev';
+  document.write('<link rel="stylesheet" href="styles.css?v=' + V + '">');
+</script>
+</head>
+<body>
+<header id="top">
+  <div class="srch"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input id="q" type="search" placeholder="Поиск: правило, слово, пример" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button id="qx" class="ic" aria-label="Очистить" hidden>✕</button></div>
+  <button id="set" class="ic" aria-label="Настройки">⚙</button>
+</header>
+<main id="main"></main>
+<nav id="tabs">
+  <button data-tab="rules"><svg viewBox="0 0 24 24"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 1-4-4z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Правила</span></button>
+  <button data-tab="words"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 3h10a3 3 0 0 1 3 3v11" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>Слова</span></button>
+  <button data-tab="rep"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Повторить</span><i id="due" hidden></i></button>
+  <button data-tab="qs"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Мои вопросы</span></button>
+</nav>
+<div id="ov"></div>
+<script>document.write('<script src="data/all-data.js?v=' + V + '"><\/script><script src="app.js?v=' + V + '"><\/script>');</script>
+</body>
+</html>
