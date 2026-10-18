@@ -11,8 +11,22 @@ const RBY = {}, WBY = {};
 D.rules.forEach(r => RBY[r.id] = r); D.words.forEach(w => WBY[w.id] = w);
 const DAY = 864e5, DAYS = [1, 3, 7, 21, 60];
 const ST = { n: 'нейтрально', r: 'разговорное', s: 'сленг', o: 'официально' };
-const CAT = [['my', 'Мои'], ['live', 'Живой немецкий'], ['b2', 'К экзамену B2'], ['char', 'Характер'], ['base', 'Слова уроков']];
+const CAT = [['my', 'Мои'], ['live', 'Живой'], ['b2', 'B2'], ['char', 'Характер'], ['base', 'Уроки']];
+const CAT_LEAD = { my: 'Твои слова и всё, что ты отправил в повторение.', live: 'Как говорят немцы вживую: сокращения, частицы, сленг.', b2: 'Обороты и связки для telc B2: говорение и письмо.', char: 'Характер человека — пары противоположностей.', base: 'Слова из уроков и твоих вопросов.' };
 const CYR = /[а-яё]/i;
+const svg = d => `<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const IC = {
+  back: svg('<path d="M15 5l-7 7 7 7"/>'),
+  x: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+  search: svg('<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>'),
+  set: svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
+  slow: svg('<path d="M3 15.5c0-4.1 3.6-7.5 8-7.5s8 3.4 8 7.5z"/><path d="M8 15.5l3-7.4 3 7.4M3.6 12.5h14.8"/><circle cx="21" cy="13.6" r="1.7"/><path d="M6.5 15.5v2.6M15.5 15.5v2.6"/>'),
+  spk: svg('<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6M18.2 6.6a7.6 7.6 0 0 1 0 10.8"/>'),
+};
+// шапка вкладки: заголовок + поиск и настройки
+const head = t => `<div class="hd"><h1>${esc(t)}</h1><button class="ic" data-act="search" aria-label="Поиск">${IC.search}</button><button class="ic" data-act="set" aria-label="Настройки">${IC.set}</button></div>`;
+// подвкладки текстом: [[значение, подпись, число]], cur — выбранное, attr — data-атрибут
+const stabs = (items, cur, attr) => `<div class="stabs">${items.map(([v, t, n]) => `<button class="${v === cur ? 'on' : ''}" data-${attr}="${esc(v)}">${esc(t)}${n ? `<small>${n}</small>` : ''}</button>`).join('')}</div>`;
 
 /* ---------- хранилище ---------- */
 const KEY = 'md_v1';
@@ -113,11 +127,11 @@ function deHTML(de, ru, o) { // предложение: слова — span.w
   o = o || {};
   const i = EXS.push({ de, ru, x: o.x || [], g: o.g || {} }) - 1;
   const xs = new Set(); (o.x || []).forEach(x => x[0].split(' ').forEach(t => xs.add(low(t))));
-  return toks(de).map((t, j) => t.w ? `<span class="w${xs.has(low(t.w)) ? ' xw' : ''}" data-s="${i}" data-j="${j}">${esc(t.w)}</span>` : esc(t.p)).join('');
+  return toks(de).map((t, j) => t.w && !/^\d+$/.test(t.w) ? `<span class="w${xs.has(low(t.w)) ? ' xw' : ''}" data-s="${i}" data-j="${j}">${esc(t.w)}</span>` : esc(t.w || t.p)).join(''); // числа не нажимаются
 }
 function exHTML(e) { // [de, ru, {x,g}]
   return `<div class="ex"><div class="tx"><div class="de">${deHTML(e[0], e[1], e[2])}</div>${e[1] ? `<div class="ru">${esc(e[1])}</div>` : ''}</div>
-    <div class="say"><button data-say="${esc(e[0])}" aria-label="Послушать">🔊</button><button data-say="${esc(e[0])}" data-slow="1" aria-label="Медленно">🐢</button></div></div>`;
+    <div class="say"><button data-say="${esc(e[0])}" aria-label="Послушать">${IC.spk}</button><button class="slow" data-say="${esc(e[0])}" data-slow="1" aria-label="Медленно">${IC.slow}</button></div></div>`;
 }
 function lexOf(tok) {
   const t = low(tok), t2 = t.replace(/^'+|'+$/g, '');
@@ -135,9 +149,9 @@ function wordPop(el) {
   const wd = wordOf(base, tok);
   const nn = /^(der|die|das) /.exec(base);
   $$('.w.on').forEach(x => x.classList.remove('on')); el.classList.add('on');
-  sheet(`<h3>${esc(tok)} <button class="ic" data-say="${esc(tok)}" aria-label="Послушать">🔊</button></h3>
+  sheet(`<h3>${esc(tok)} <button class="ic" data-say="${esc(tok)}" aria-label="Послушать">${IC.spk}</button></h3>
     ${base && low(base) !== t ? `<div class="base">начальная форма: ${nn ? `<b class="art-${nn[1]}">${esc(nn[1])}</b> ${esc(base.slice(4))}` : `<b>${esc(base)}</b>`}</div>` : ''}
-    <div class="ru">${ru ? esc(ru) : '<span style="color:var(--hint)">перевода этого слова пока нет</span>'}</div>
+    <div class="ru">${ru ? esc(ru) : '<span class="mut">перевода этого слова пока нет</span>'}</div>
     ${note ? `<div class="note">${esc(note)}</div>` : ''}
     ${xp ? `<div class="xp"><b>${esc(xp[1])}</b>${esc(xp[2])}</div>` : ''}
     <div class="note">В предложении: «${esc(ex.ru)}»</div>
@@ -157,36 +171,35 @@ function wordPop(el) {
 const myHas = w => S.my.some(x => low(x.w) === low(w));
 
 /* ---------- шторка, тост, вибро ---------- */
-let sheetClose = null;
+let sheetClose = null, sheetOn = false; // sheetOn — шторка открыта (класс open появляется кадром позже, ради анимации)
 function sheet(html, onClose) {
   const ov = $('#ov');
   ov.innerHTML = `<div class="dim"></div><div class="sh" role="dialog">${html}</div>`;
-  requestAnimationFrame(() => ov.classList.add('open'));
+  sheetOn = true; requestAnimationFrame(() => { if (sheetOn) ov.classList.add('open'); });
   $('.dim', ov).onclick = closeSheet;
   sheetClose = onClose || null; backSync();
   return $('.sh', ov);
 }
 function closeSheet() {
-  const ov = $('#ov'); if (!ov.classList.contains('open')) return false;
-  ov.classList.remove('open'); if (sheetClose) sheetClose(); sheetClose = null;
-  setTimeout(() => { if (!ov.classList.contains('open')) ov.innerHTML = ''; }, 260); backSync();
+  const ov = $('#ov'); if (!sheetOn) return false;
+  sheetOn = false; ov.classList.remove('open'); if (sheetClose) sheetClose(); sheetClose = null;
+  setTimeout(() => { if (!sheetOn) ov.innerHTML = ''; }, 260); backSync();
   return true;
 }
 function toast(t) { $$('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
 function haptic(k) { try { if (TG && TG.HapticFeedback) k === 'ok' || k === 'bad' ? TG.HapticFeedback.notificationOccurred(k === 'ok' ? 'success' : 'error') : TG.HapticFeedback.selectionChanged(); } catch (e) {} }
 
 /* ---------- навигация ---------- */
-let TAB = 'rules', STACK = [], F = { lvl: '', tag: '', cat: 'live', q: '' };
+let TAB = 'rules', STACK = [], F = { lvl: '', cat: 'live', q: '' };
 try { const t = sessionStorage.getItem('md_tab'); if (t) TAB = t; } catch (e) {}
-function go(page) { STACK.push(page); render(); window.scrollTo(0, 0); }
+function go(page) { page.y = window.scrollY; STACK.push(page); render(); window.scrollTo(0, 0); } // y — куда вернуть прокрутку по «назад»
 function back() {
   if (closeSheet()) return;
-  if (STACK.length) { STACK.pop(); render(); return; }
-  if (F.q) { F.q = ''; $('#q').value = ''; render(); }
+  if (STACK.length) { const p = STACK.pop(); render(); if (p.y != null) window.scrollTo(0, p.y); }
 }
 function backSync() {
   if (!TG || !TG.BackButton) return;
-  STACK.length || $('#ov').classList.contains('open') || F.q ? TG.BackButton.show() : TG.BackButton.hide();
+  STACK.length || sheetOn ? TG.BackButton.show() : TG.BackButton.hide();
 }
 function render() {
   EXS.length = 0;
@@ -195,26 +208,25 @@ function render() {
   $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
   const m = $('#main');
   if (top) m.innerHTML = top.r();
-  else if (F.q) m.innerHTML = searchHTML(F.q);
   else m.innerHTML = ({ rules: rulesHTML, words: wordsHTML, rep: repHTML, qs: qsHTML })[TAB]();
   if (top && top.bind) top.bind(m); else bindTab(m);
   badge(); backSync();
 }
 
 /* ---------- вкладка «Правила» ---------- */
-function ruleDots(r) { const n = r.quiz.length, k = r.quiz.filter((_, i) => { const e = S.srs['q:' + r.id + ':' + i]; return e && e[0] >= 1; }).length;
-  return `<span class="dots">${r.quiz.map((_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join('')}</span>`; }
+const ruleDone = r => r.quiz.filter((_, i) => { const e = S.srs['q:' + r.id + ':' + i]; return e && e[0] >= 1; }).length;
 function ruleCard(r) {
-  return `<button class="rc" data-rule="${r.id}"><b>${esc(r.title)}</b><p>${esc(r.short)}</p>
-    <div class="mt"><span class="lvl">${r.lvl}</span>${ruleDots(r)}${S.seen[r.id] ? '' : '<span>новое</span>'}</div></button>`;
+  const k = ruleDone(r), n = r.quiz.length;
+  return `<button class="rc" data-rule="${r.id}"><span class="tx"><b>${S.seen[r.id] ? '' : '<i class="new" title="новое"></i>'}${esc(r.title)}</b><p>${esc(r.short)}</p></span>
+    <span class="mt"><span class="lv">${r.lvl}</span><span class="pr${k === n ? ' all' : ''}">${k}/${n}</span></span></button>`;
 }
 function rulesHTML() {
-  const tags = [...new Set(D.rules.flatMap(r => r.tags).filter(t => !/^[ABC]\d$/.test(t)))];
-  const L = D.rules.filter(r => (!F.lvl || r.lvl === F.lvl) && (!F.tag || r.tags.includes(F.tag)));
-  return `<h1>Правила</h1><p class="lead">Твой учебник: каждая страница — из твоего вопроса.</p>
-    <div class="chips">${['', 'A1', 'A2', 'B1', 'B2'].map(l => `<button class="chip${F.lvl === l ? ' on' : ''}" data-lvl="${l}">${l || 'Все уровни'}</button>`).join('')}</div>
-    <div class="chips">${tags.map(t => `<button class="chip${F.tag === t ? ' on' : ''}" data-tg="${esc(t)}">#${esc(t)}</button>`).join('')}</div>
-    <div class="list">${L.length ? L.map(ruleCard).join('') : '<div class="empty">Ничего не нашлось</div>'}</div>`;
+  const lv = ['A1', 'A2', 'B1', 'B2'].filter(l => D.rules.some(r => r.lvl === l));
+  if (F.lvl && !lv.includes(F.lvl)) F.lvl = '';
+  const L = D.rules.filter(r => !F.lvl || r.lvl === F.lvl);
+  return `${head('Правила')}<p class="lead">Каждая страница — из твоего вопроса.</p>
+    ${stabs([['', 'Все', D.rules.length], ...lv.map(l => [l, l, D.rules.filter(r => r.lvl === l).length])], F.lvl, 'lvl')}
+    <div class="list">${L.map(ruleCard).join('')}</div>`;
 }
 
 /* ---------- страница правила ---------- */
@@ -226,17 +238,17 @@ function ruleOpen(id) {
 function rulePage(r) {
   const qs = D.qs.filter(q => q.r.includes(r.id));
   const inRep = r.quiz.some((_, i) => S.srs['q:' + r.id + ':' + i]);
-  return `<div class="pg"><div class="pgh"><button class="ic" data-back aria-label="Назад">‹</button><span class="t">${esc(r.title)}</span><span class="lvl">${r.lvl}</span></div>
-    <h1>${esc(r.title)}</h1>
-    <div style="margin:0 2px 12px">${r.tags.filter(t => !/^[ABC]\d$/.test(t)).map(t => `<span class="tag">#${esc(t)}</span>`).join('')}</div>
+  return `<div class="pg"><div class="pgh"><button class="ic" data-back aria-label="Назад">${IC.back}</button><span class="t">${esc(r.title)}</span><span class="lv">${r.lvl}</span></div>
+    <h1 class="pt">${esc(r.title)}</h1>
+    <div class="tags">${r.tags.filter(t => !/^[ABC]\d$/.test(t)).map(t => `<span>#${esc(t)}</span>`).join('')}</div>
     <div class="short">${esc(r.short)}</div>
     ${r.table ? `<h2>Схема</h2><div class="tbl"><table><tr>${r.table.h.map(h => `<th>${esc(h)}</th>`).join('')}</tr>${r.table.r.map(row => `<tr>${row.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>` : ''}
     ${r.when ? `<h2>Когда что</h2><ul class="when">${r.when.map(w => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}
-    <h2>Примеры · нажми на любое слово</h2><div class="list">${r.ex.map(exHTML).join('')}</div>
-    ${r.mistakes && r.mistakes.length ? `<h2>Типичные ошибки</h2><div class="list">${r.mistakes.map(x => `<div class="mis"><div class="no">✗ ${esc(x[0])}</div><div class="yes">✓ ${esc(x[1])}</div><small>${esc(x[2])}</small></div>`).join('')}</div>` : ''}
+    <h2>Примеры <small>нажми на любое слово</small></h2><div class="list">${r.ex.map(exHTML).join('')}</div>
+    ${r.mistakes && r.mistakes.length ? `<h2>Типичные ошибки</h2><div class="list">${r.mistakes.map(x => `<div class="mis"><div class="no">${esc(x[0])}</div><div class="yes">${esc(x[1])}</div><small>${esc(x[2])}</small></div>`).join('')}</div>` : ''}
     ${qs.length ? `<h2>Ты спрашивал</h2><div class="list">${qs.map(q => `<div class="qref"><small>${dateTxt(q.d)}</small>${esc(q.q)}</div>`).join('')}</div>` : ''}
-    <div class="bar"><div class="in"><button class="btn" id="rQuiz">Проверить себя · ${r.quiz.length}</button>
-      <button class="btn sec" id="rRep" style="width:auto;flex:0 0 auto">${inRep ? '✓ В повторении' : '＋ В повторение'}</button></div></div></div>`;
+    <div class="bar"><div class="in"><button class="btn" id="rQuiz">Проверить · ${r.quiz.length}</button>
+      <button class="btn sec" id="rRep">${inRep ? '✓ В повторении' : '＋ В повторение'}</button></div></div></div>`;
 }
 function bindRule(m, r) {
   $('[data-back]', m).onclick = back;
@@ -248,32 +260,33 @@ function bindRule(m, r) {
 }
 
 /* ---------- вкладка «Слова» ---------- */
+const STS = { r: 'разг.', s: 'сленг', o: 'офиц.' }, CAT_ST = { live: 'r', b2: 'o' }; // в «Живом» всё разговорное, в B2 всё официальное — там метку не пишем
 function wRow(w, k) {
   const a = w.art ? `<span class="art-${w.art}">${w.art}</span> ` : '';
   return `<button class="wr" data-word="${w.id}"><span class="tx"><b>${a}${esc(w.w)}</b><small>${esc(w.ru)}</small></span>
-    ${k && S.srs[k] ? `<span class="in-rep">${whenTxt(k)}</span>` : `<span class="st st-${w.st}">${w.st !== 'n' ? ST[w.st] : ''}</span>`}</button>`;
+    ${k && S.srs[k] ? `<span class="in-rep">${whenTxt(k)}</span>` : STS[w.st] && CAT_ST[w.cat] !== w.st ? `<span class="st st-${w.st}">${STS[w.st]}</span>` : ''}</button>`;
 }
 function myRow(x) {
   return `<button class="wr" data-my="${x.id}"><span class="tx"><b>${esc(x.w)}</b><small>${esc(x.ru || '')}</small></span><span class="in-rep">${whenTxt('m:' + x.id)}</span></button>`;
 }
 function wordsHTML() {
   let body = '';
+  const ws = D.words.filter(w => S.srs['w:' + w.id]), myN = S.my.length + ws.length;
   if (F.cat === 'my') {
-    const ws = D.words.filter(w => S.srs['w:' + w.id]);
-    body = ws.length || S.my.length
+    body = myN
       ? `<div class="list">${S.my.slice().reverse().map(myRow).join('')}${ws.map(w => wRow(w, 'w:' + w.id)).join('')}</div>`
-      : `<div class="empty">Пока пусто.<br>Нажми на любое слово в примере → «В мои слова»,<br>или открой карточку слова → «В повторение».</div>`;
+      : `<div class="empty">Пока пусто.<br>Нажми на любое слово в примере → «В мои слова»<br>или открой карточку слова → «В повторение».</div>`;
   } else {
     const L = D.words.filter(w => w.cat === F.cat), subs = [...new Set(L.map(w => w.sub))];
     body = subs.map(s => `<h2>${esc(s)}</h2><div class="list">${L.filter(w => w.sub === s).map(w => wRow(w, 'w:' + w.id)).join('')}</div>`).join('');
   }
-  return `<h1>Слова</h1><p class="lead">${F.cat === 'live' ? 'Как говорят немцы вживую: сокращения, частицы, сленг, фразы на каждый день.' : F.cat === 'b2' ? 'Готовые обороты и связки для telc B2: говорение и письмо.' : F.cat === 'my' ? 'Твои слова и всё, что ты отправил в повторение.' : 'Нажми на слово — откроется карточка.'}</p>
-    <div class="chips">${CAT.map(c => `<button class="chip${F.cat === c[0] ? ' on' : ''}" data-cat="${c[0]}">${c[1]}${c[0] === 'my' && S.my.length ? ' · ' + S.my.length : ''}</button>`).join('')}</div>${body}`;
+  return `${head('Слова')}${stabs(CAT.map(c => [c[0], c[1], c[0] === 'my' ? myN : 0]), F.cat, 'cat')}
+    <p class="lead">${CAT_LEAD[F.cat] || ''}</p>${body}`;
 }
 function wordCard(id) {
   const w = WBY[id]; if (!w) return;
   const k = 'w:' + id;
-  sheet(`<h3>${w.art ? `<span class="art-${w.art}">${w.art}</span>` : ''}${esc(w.w)} <button class="ic" data-say="${esc((w.art ? w.art + ' ' : '') + w.w.replace(/[…]/g, ''))}" aria-label="Послушать">🔊</button></h3>
+  sheet(`<h3>${w.art ? `<span class="art-${w.art}">${w.art}</span>` : ''}${esc(w.w)} <button class="ic" data-say="${esc((w.art ? w.art + ' ' : '') + w.w.replace(/[…]/g, ''))}" aria-label="Послушать">${IC.spk}</button></h3>
     <div class="ru">${esc(w.ru)}</div>
     <dl class="kv">${w.pl ? `<dt>Мн. ч.</dt><dd>${esc(w.pl)}</dd>` : ''}${w.forms ? `<dt>Формы</dt><dd>${esc(w.forms)}</dd>` : ''}${w.sep ? `<dt>Приставка</dt><dd>${esc(w.sep)} — отделяется</dd>` : ''}
       ${w.gov ? `<dt>Управление</dt><dd>${esc(w.gov)}</dd>` : ''}${w.snd ? `<dt>Как звучит</dt><dd>«${esc(w.snd)}»</dd>` : ''}${w.opp ? `<dt>Противоп.</dt><dd>${esc(w.opp)}</dd>` : ''}
@@ -288,7 +301,7 @@ function wordCard(id) {
 }
 function myCard(id) {
   const x = S.my.find(y => y.id === id); if (!x) return;
-  sheet(`<h3>${esc(x.w)} <button class="ic" data-say="${esc(x.w)}">🔊</button></h3><div class="ru">${esc(x.ru || '')}</div>
+  sheet(`<h3>${esc(x.w)} <button class="ic" data-say="${esc(x.w)}" aria-label="Послушать">${IC.spk}</button></h3><div class="ru">${esc(x.ru || '')}</div>
     <div class="note">${whenTxt('m:' + id)}</div>${x.ex ? exHTML(x.ex) : ''}
     <div class="acts"><button class="btn sec" id="myDel">Убрать из моих слов</button></div>`);
   $('#myDel').onclick = () => { S.my = S.my.filter(y => y.id !== id); S.del.push(id); delete S.srs['m:' + id]; save(); closeSheet(); render(); toast('Убрано'); };
@@ -303,15 +316,14 @@ function newKeys() { // ещё не начатые задания: сначал�
 function repHTML() {
   const due = dueKeys(), all = Object.keys(S.srs).filter(keyOk), lrn = all.filter(learned).length;
   const nx = all.filter(k => !isDue(k)).map(k => S.srs[k][1]).sort((a, b) => a - b)[0];
-  return `<h1>Повторить</h1><p class="lead">Интервалы: 1 → 3 → 7 → 21 → 60 дней. Ошибся — снова завтра.</p>
-    <div class="card" style="text-align:center;padding:22px 16px">
-      ${due.length ? `<div style="font-size:44px;font-weight:800;line-height:1">${due.length}</div><div style="color:var(--hint);margin:6px 0 16px">${pl(due.length, ['задание', 'задания', 'заданий'])} на сегодня</div>
+  return `${head('Повторить')}
+    <div class="rep">${due.length ? `<div class="big">${due.length}</div><div class="sub">${pl(due.length, ['задание', 'задания', 'заданий'])} на сегодня</div>
         <button class="btn" id="go">Начать · ${Math.min(Math.max(due.length, 5), 8)}</button>`
-      : `<div style="font-size:36px">✓</div><div style="margin:6px 0 4px;font-weight:600">${all.length ? 'На сегодня всё' : 'Повторять пока нечего'}</div>
-        <div style="color:var(--hint);margin-bottom:16px">${nx ? 'Следующее — ' + whenTxt(all.find(k => S.srs[k][1] === nx)) : 'Открой правило → «Проверить себя» или «В повторение».'}</div>
-        <button class="btn" id="go">Новые задания · 5</button>`}
-    </div>
-    <h2>Прогресс</h2><div class="card"><dl class="kv" style="margin:0"><dt>В повторении</dt><dd>${all.length}</dd><dt>Выучено</dt><dd>${lrn}</dd><dt>Моих слов</dt><dd>${S.my.length}</dd></dl></div>`;
+      : `<div class="done">${all.length ? 'На сегодня всё' : 'Повторять пока нечего'}</div>
+        <div class="sub">${nx ? 'Следующее — ' + whenTxt(all.find(k => S.srs[k][1] === nx)) : 'Открой правило → «Проверить» или «В повторение».'}</div>
+        <button class="btn" id="go">Новые задания · 5</button>`}</div>
+    <div class="stats"><div><b>${all.length}</b><span>в повторении</span></div><div><b>${lrn}</b><span>выучено</span></div><div><b>${S.my.length}</b><span>моих слов</span></div></div>
+    <p class="lead c">Интервалы: 1 → 3 → 7 → 21 → 60 дней.<br>Ошибся или ответил не с первого раза — снова завтра.</p>`;
 }
 function startRep() {
   const due = dueKeys();
@@ -345,9 +357,9 @@ const MON = ['января', 'февраля', 'марта', 'апреля', 'м
 const dateTxt = d => { const [y, m, dd] = d.split('-'); return `${+dd} ${MON[+m - 1]} ${y}`; };
 function qsHTML() {
   const L = D.qs.slice().reverse(), ds = [...new Set(L.map(q => q.d))];
-  return `<h1>Мои вопросы</h1><p class="lead">Всё, что ты спрашивал. Нажми на правило — откроется страница.</p>
-    ${ds.map(d => `<h2>${dateTxt(d)}</h2><div class="list">${L.filter(q => q.d === d).map(q => `<div class="card"><div>${esc(q.q)}</div>
-      <div class="chips wrap">${q.r.map(id => `<button class="chip" data-rule="${id}">${esc(RBY[id].title)}</button>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
+  return `${head('Мои вопросы')}<p class="lead">Всё, что ты спрашивал. Нажми на правило — откроется страница.</p>
+    ${ds.map(d => `<h2>${dateTxt(d)}</h2><div class="list">${L.filter(q => q.d === d).map(q => `<div class="qi"><div class="q">${esc(q.q)}</div>
+      <div class="ql">${q.r.filter(id => RBY[id]).map(id => `<button data-rule="${id}">${esc(RBY[id].title)}&nbsp;›</button>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
 }
 
 /* ---------- поиск ---------- */
@@ -362,9 +374,33 @@ function searchHTML(q) {
   const lx = Object.keys(D.lex).filter(k => norm(k) === n || norm(D.lex[k][0]) === n).slice(0, 4);
   if (!rs.length && !ws.length && !exs.length && !my.length && !lx.length) return `<div class="empty">Ничего не нашлось по «${esc(q)}».<br>Спроси меня в чате — сделаю страницу.</div>`;
   return `${lx.length ? `<h2>Словарик</h2><div class="list">${lx.map(k => `<div class="wr"><span class="tx"><b>${esc(k)}</b><small>${esc(D.lex[k][0])} — ${esc(D.lex[k][1])}</small></span></div>`).join('')}</div>` : ''}
-    ${rs.length ? `<h2>Правила · ${rs.length}</h2><div class="list">${rs.map(ruleCard).join('')}</div>` : ''}
-    ${ws.length || my.length ? `<h2>Слова · ${ws.length + my.length}</h2><div class="list">${my.map(myRow).join('')}${ws.slice(0, 30).map(w => wRow(w, 'w:' + w.id)).join('')}</div>` : ''}
-    ${exs.length ? `<h2>Примеры · ${exs.length}</h2><div class="list">${exs.slice(0, 30).map(([r, e]) => `${exHTML(e)}<button class="qref" data-rule="${r.id}" style="margin-top:-4px"><small>из правила</small>${esc(r.title)} ›</button>`).join('')}</div>` : ''}`;
+    ${rs.length ? `<h2>Правила <small>${rs.length}</small></h2><div class="list">${rs.map(ruleCard).join('')}</div>` : ''}
+    ${ws.length || my.length ? `<h2>Слова <small>${ws.length + my.length}</small></h2><div class="list">${my.map(myRow).join('')}${ws.slice(0, 30).map(w => wRow(w, 'w:' + w.id)).join('')}</div>` : ''}
+    ${exs.length ? `<h2>Примеры <small>${exs.length}</small></h2><div class="list">${exs.slice(0, 30).map(([r, e]) => `<div class="exq">${exHTML(e)}<button class="from" data-rule="${r.id}">${esc(r.title)}&nbsp;›</button></div>`).join('')}</div>` : ''}`;
+}
+// поиск — своя страница: поле сверху, ниже результаты (поле не перерисовываем — на iPhone не слетает клавиатура)
+function searchOpen() {
+  F.q = '';
+  go({ r: searchPage, bind: bindSearch, fresh: true });
+}
+function searchPage() {
+  const tags = [...new Set(D.rules.flatMap(r => r.tags).filter(t => !/^[ABC]\d$/.test(t)))];
+  return `<div class="pg srp"><div class="pgh"><button class="ic" data-back aria-label="Назад">${IC.back}</button>
+    <label class="srch">${IC.search}<input id="q" type="search" enterkeyhint="search" placeholder="Правило, слово, пример" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="${esc(F.q)}"><button class="ic" id="qx" aria-label="Очистить"${F.q ? '' : ' hidden'}>${IC.x}</button></label></div>
+    <div id="sr">${F.q.trim() ? searchHTML(F.q) : searchHint(tags)}</div></div>`;
+}
+const searchHint = tags => `<p class="lead">Ищи по-немецки или по-русски. Умлауты можно не ставить: «gross» найдёт «groß».</p>
+  <h2>Темы</h2><div class="tagq">${tags.map(t => `<button data-tq="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`;
+function bindSearch(m) {
+  const pg = STACK[STACK.length - 1], inp = $('#q', m), x = $('#qx', m), sr = $('#sr', m);
+  const tags = [...new Set(D.rules.flatMap(r => r.tags).filter(t => !/^[ABC]\d$/.test(t)))];
+  const upd = () => { F.q = inp.value; x.hidden = !F.q; EXS.length = 0; sr.innerHTML = F.q.trim() ? searchHTML(F.q) : searchHint(tags); };
+  $('[data-back]', m).onclick = back;
+  inp.addEventListener('input', upd);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
+  x.onclick = e => { e.preventDefault(); inp.value = ''; upd(); inp.focus(); };
+  sr.addEventListener('click', e => { const t = e.target.closest('[data-tq]'); if (t) { inp.value = t.dataset.tq; upd(); } });
+  if (pg.fresh) { pg.fresh = false; setTimeout(() => inp.focus(), 60); }
 }
 
 /* ---------- задания ---------- */
@@ -378,12 +414,12 @@ const pickFull = t => { const o = t.o[t.a]; return t.q.replace('___', /^\(/.test
 const WORDS = s => toks(s).filter(t => t.w).map(t => t.w);
 function quizHTML() {
   const Q = QZ, n = Q.items.length;
-  if (Q.i >= n) return `<div class="qz"><div class="qtop"><button class="ic" data-back aria-label="Закрыть">✕</button><div class="prog"><i style="width:100%"></i></div></div>
+  if (Q.i >= n) return `<div class="qz"><div class="qtop"><button class="ic" data-back aria-label="Закрыть">${IC.x}</button><div class="prog"><i style="width:100%"></i></div></div>
     <div class="res"><div class="big">${Q.ok} / ${Q.first}</div><p>верно с первого раза</p>
-    <p>${Q.ok === Q.first ? 'Чисто! 🔥' : 'Ошибки вернутся завтра — так и запоминается.'}</p></div>
+    <p>${Q.ok === Q.first ? 'Чисто — всё с первого раза.' : 'Ошибки вернутся завтра — так и запоминается.'}</p></div>
     <div class="bar"><div class="in"><button class="btn" data-back>Готово</button></div></div></div>`;
   const it = Q.items[Q.i], t = it.task;
-  const head = `<div class="qtop"><button class="ic" data-back aria-label="Закрыть">✕</button><div class="prog"><i style="width:${Q.i / n * 100}%"></i></div><span style="color:var(--hint);font-size:14px">${Q.i + 1}/${n}</span></div>`;
+  const top = `<div class="qtop"><button class="ic" data-back aria-label="Закрыть">${IC.x}</button><div class="prog"><i style="width:${Q.i / n * 100}%"></i></div><span class="qn">${Q.i + 1}/${n}</span></div>`;
   let body = '';
   if (t.t === 'pick') {
     const [a, b] = t.q.split('___');
@@ -391,22 +427,22 @@ function quizHTML() {
       <div class="opts">${t.o.map((o, i) => `<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div>`;
   } else if (t.t === 'mean') {
     const de = !CYR.test(t.q);
-    body = `<div class="qk">${de ? 'Что значит?' : 'Выбери'}</div><div class="qq" style="display:flex;align-items:center;gap:6px">${esc(t.q)}${de ? `<button class="ic" data-say="${esc(t.q)}">🔊</button>` : ''}</div>
+    body = `<div class="qk">${de ? 'Что значит?' : 'Выбери'}</div><div class="qq qw">${esc(t.q)}${de ? `<button class="ic" data-say="${esc(t.q)}" aria-label="Послушать">${IC.spk}</button>` : ''}</div>
       <div class="opts">${t.o.map((o, i) => `<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div>`;
   } else if (t.t === 'art') {
-    body = `<div class="qk">der, die или das?</div><div class="qq" style="font-size:30px;font-weight:700">${esc(t.w)}</div><div class="qhint">${esc(t.ru)}</div>
+    body = `<div class="qk">der, die или das?</div><div class="qq big">${esc(t.w)}</div><div class="qhint">${esc(t.ru)}</div>
       <div class="arts">${['der', 'die', 'das'].map(a => `<button class="opt art-${a}" data-art="${a}">${a}</button>`).join('')}</div>`;
   } else if (t.t === 'build') {
     if (S.opt.type) body = `<div class="qk">Напиши по-немецки</div><div class="qq">${esc(t.ru)}</div><input class="typ" id="typ" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Пиши здесь…">
-      <div style="margin-top:12px"><button class="btn" id="chk">Проверить</button></div>`;
+      <div class="qgo"><button class="btn" id="chk">Проверить</button></div>`;
     else body = `<div class="qk">Собери фразу</div><div class="qq">${esc(t.ru)}</div><div class="slots" id="slots"></div>
       <div class="tiles" id="tiles">${shuf(WORDS(t.de).map((w, i) => ({ w, i }))).map(x => `<button class="tile" data-i="${x.i}">${esc(x.w)}</button>`).join('')}</div>
-      <div style="margin-top:16px"><button class="btn" id="chk" disabled>Проверить</button></div>`;
+      <div class="qgo"><button class="btn" id="chk" disabled>Проверить</button></div>`;
   } else if (t.t === 'err') {
     body = `<div class="qk">Найди ошибку — нажми на неправильное слово</div>
       <div class="errs">${WORDS(t.q).map((w, i) => `<button class="tile" data-e="${i}">${esc(w)}</button>`).join('')}</div>`;
   }
-  return `<div class="qz">${head}${body}<div id="fb"></div><div class="bar" id="nxB" hidden><div class="in"><button class="btn" id="nx">Дальше</button></div></div></div>`;
+  return `<div class="qz">${top}${body}<div id="fb"></div><div class="bar" id="nxB" hidden><div class="in"><button class="btn" id="nx">Дальше</button></div></div></div>`;
 }
 function bindQuiz(m) {
   $$('[data-back]', m).forEach(b => b.onclick = () => { QZ = null; back(); });
@@ -451,7 +487,7 @@ function bindQuiz(m) {
       const ok = ws[+b.dataset.e] === t.bad;
       if (!ok && tries === 0) { tries++; b.classList.add('bad'); haptic('bad'); toast('Нет, тут всё верно. Ещё раз'); return; }
       $$('[data-e]', m).forEach(x => { if (ws[+x.dataset.e] === t.bad) x.classList.add('ok'); });
-      finish(ok, `<div><s style="color:var(--bad)">${esc(t.bad)}</s> → <b style="color:var(--ok)">${esc(t.fix)}</b></div>${t.w ? `<div style="margin-top:4px">${esc(t.w)}</div>` : ''}`);
+      finish(ok, `<div><s class="no">${esc(t.bad)}</s> → <b class="yes">${esc(t.fix)}</b></div>${t.w ? `<div class="w2">${esc(t.w)}</div>` : ''}`);
     });
   } else if (t.t === 'build') {
     const target = WORDS(t.de), right = () => exLine(t.de, t.ru);
@@ -460,7 +496,7 @@ function bindQuiz(m) {
       const chk = () => {
         const a = norm(inp.value).replace(/[^a-zа-я0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(), b = norm(target.join(' ')).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
         const ok = a === b || lev(a, b) <= 1;
-        if (!ok && tries === 0) { tries++; inp.style.borderColor = 'var(--bad)'; haptic('bad'); toast('Не совсем — попробуй ещё'); return; }
+        if (!ok && tries === 0) { tries++; inp.classList.add('bad'); haptic('bad'); toast('Не совсем — попробуй ещё'); return; }
         inp.disabled = true; finish(ok, right()); say(t.de);
       };
       $('#chk', m).onclick = chk; inp.onkeydown = e => { if (e.key === 'Enter') chk(); };
@@ -491,12 +527,12 @@ function lev(a, b) { if (Math.abs(a.length - b.length) > 2) return 9; const d = 
 /* ---------- настройки ---------- */
 function settings() {
   const api = window.MD_API;
-  sheet(`<h3 style="font-size:22px">Настройки</h3>
+  sheet(`<h3>Настройки</h3>
     <div class="sw-row"><div>Задания с вводом текста<small>Вместо кубиков — писать самому</small></div><button class="sw${S.opt.type ? ' on' : ''}" data-opt="type" aria-label="Ввод текста"></button></div>
     <div class="sw-row"><div>Напоминание в боте<small>${api ? 'Раз в день: «5 заданий на сегодня»' : 'Заработает, когда подключим бота'}</small></div><button class="sw${S.opt.rem ? ' on' : ''}" data-opt="rem" aria-label="Напоминание"></button></div>
     <div class="sw-row"><div>Во сколько</div><select id="hh">${[...Array(18)].map((_, i) => i + 6).map(h => `<option value="${h}"${S.opt.hh === h ? ' selected' : ''}>${String(h).padStart(2, '0')}:00</option>`).join('')}</select></div>
-    <div class="sw-row" style="border:0"><div>Сбросить прогресс<small>Повторение и мои слова — с нуля</small></div><button class="chip" id="rst" style="background:var(--bad-bg);color:var(--bad)">Сбросить</button></div>
-    <p class="note" style="text-align:center;margin-top:14px">Мой немецкий · версия ${esc(window.V || '')}</p>`);
+    <div class="sw-row"><div>Сбросить прогресс<small>Повторение и мои слова — с нуля</small></div><button class="rst" id="rst">Сбросить</button></div>
+    <p class="ver">Мой немецкий · версия ${esc(window.V || '')}</p>`);
   $$('[data-opt]').forEach(b => b.onclick = () => { const k = b.dataset.opt; S.opt[k] = !S.opt[k]; b.classList.toggle('on', S.opt[k]); save(); if (k === 'rem') remindSync(true); });
   $('#hh').onchange = e => { S.opt.hh = +e.target.value; save(); remindSync(true); };
   let armed = false;
@@ -518,14 +554,16 @@ function badge() { const n = dueKeys().length, b = $('#due'); b.hidden = !n; b.t
 
 /* ---------- события ---------- */
 function bindTab(m) {
-  $$('[data-lvl]', m).forEach(b => b.onclick = () => { F.lvl = b.dataset.lvl; render(); });
-  $$('[data-tg]', m).forEach(b => b.onclick = () => { F.tag = F.tag === b.dataset.tg ? '' : b.dataset.tg; render(); });
-  $$('[data-cat]', m).forEach(b => b.onclick = () => { F.cat = b.dataset.cat; render(); });
+  $$('[data-lvl]', m).forEach(b => b.onclick = () => { F.lvl = b.dataset.lvl; haptic(); render(); });
+  $$('[data-cat]', m).forEach(b => b.onclick = () => { F.cat = b.dataset.cat; haptic(); render(); });
+  const on = $('.stabs .on', m); // выбранная подвкладка — в поле зрения, если ряд не влез
+  if (on) { const p = on.parentNode; p.scrollLeft = Math.max(0, on.offsetLeft - (p.clientWidth - on.offsetWidth) / 2); }
   const g = $('#go', m); if (g) g.onclick = startRep;
 }
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-say],.w,[data-rule],[data-word],[data-my]');
+  const t = e.target.closest('[data-say],.w,[data-rule],[data-word],[data-my],[data-act]');
   if (!t) return;
+  if (t.dataset.act) { t.dataset.act === 'search' ? searchOpen() : settings(); return; }
   if (t.dataset.say !== undefined) { say(t.dataset.say, !!t.dataset.slow); return; }
   if (t.classList.contains('w')) { wordPop(t); return; }
   if (t.dataset.rule) { closeSheet(); ruleOpen(t.dataset.rule); return; }
@@ -533,37 +571,30 @@ document.addEventListener('click', e => {
   if (t.dataset.my) myCard(t.dataset.my);
 });
 $$('#tabs button').forEach(b => b.onclick = () => {
-  TAB = b.dataset.tab; STACK = []; F.q = ''; $('#q').value = ''; $('#qx').hidden = true;
+  if (TAB === b.dataset.tab && !STACK.length) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  TAB = b.dataset.tab; STACK = []; F.q = ''; closeSheet();
   try { sessionStorage.setItem('md_tab', TAB); } catch (e) {}
   haptic(); render(); window.scrollTo(0, 0);
 });
-$('#q').addEventListener('input', e => { F.q = e.target.value; $('#qx').hidden = !F.q; render(); });
-$('#qx').onclick = () => { F.q = ''; $('#q').value = ''; $('#qx').hidden = true; render(); };
-$('#set').onclick = settings;
 document.addEventListener('keydown', e => { if (e.key === 'Escape') back(); });
 
 /* ---------- тема и Telegram ---------- */
+// вид всегда тёмный, как в «Языках по кино»: тема Telegram приложение не красит
+const BG = '#0b0b0d';
 function theme() {
-  const dark = TG ? TG.colorScheme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  const p = (TG && TG.themeParams) || {}, st = document.documentElement.style;
-  if (p.secondary_bg_color) st.setProperty('--bg', p.secondary_bg_color);
-  if (p.section_bg_color || p.bg_color) st.setProperty('--card', p.section_bg_color || p.bg_color);
-  if (p.text_color) st.setProperty('--tx', p.text_color);
-  if (p.hint_color) st.setProperty('--hint', p.hint_color);
-  if (p.button_color) st.setProperty('--acc', p.button_color);
-  if (p.button_text_color) st.setProperty('--acc-tx', p.button_text_color);
-  try { if (TG) { TG.setHeaderColor(p.secondary_bg_color ? 'secondary_bg_color' : 'bg_color'); TG.setBackgroundColor && TG.setBackgroundColor(p.secondary_bg_color || p.bg_color || '#f1f2f6'); } } catch (e) {}
+  if (!TG) return;
+  try { TG.setHeaderColor(BG); } catch (e) {}
+  try { TG.setBackgroundColor && TG.setBackgroundColor(BG); } catch (e) {}
+  try { TG.setBottomBarColor && TG.isVersionAtLeast('7.10') && TG.setBottomBarColor(BG); } catch (e) {}
 }
 if (TG) {
   TG.ready(); TG.expand();
-  TG.onEvent('themeChanged', theme);
   if (TG.BackButton) TG.BackButton.onClick(back);
   try { TG.disableVerticalSwipes && TG.disableVerticalSwipes(); } catch (e) {}
-} else matchMedia('(prefers-color-scheme: dark)').addEventListener('change', theme);
+}
 theme();
 render();
 cloudRead();
 remindSync(false);
-window.MD = { S: () => S, grade, render, go, back, dueKeys, runQuiz, RBY }; // для проверки
+window.MD = { S: () => S, grade, render, go, back, dueKeys, runQuiz, RBY, itemOf, QZ: () => QZ }; // для проверки (tests/app.js)
 })();
