@@ -79,6 +79,7 @@ const fakeTG = (cloud, local) => `(()=>{window.__cloud=${JSON.stringify(cloud ||
   const OVF = []; const ovf = async name => { const r = await ev(() => __ovf()); if (r.length) OVF.push([name, r]); };
   const bb = () => ev(() => window.__bb.slice(-1)[0]);
   const DATA = await ev(() => ({ rules: MD_DATA.rules.map(r => ({ id: r.id, n: r.quiz.length })), words: MD_DATA.words.length, qs: MD_DATA.qs.length, lessons: MD.path().length }));
+  const CATS_N = await ev(() => new Set(MD.PACKS.map(p => p.cat)).size);   // разделы слов (1.3: + «С курса B2»)
   const TOTAL = DATA.rules.reduce((a, r) => a + r.n, 0);
 
   /* 1. старт, перенос 1.1, облако, вид */
@@ -93,6 +94,11 @@ const fakeTG = (cloud, local) => `(()=>{window.__cloud=${JSON.stringify(cloud ||
   await click('.node.lock'); r = await ev(() => (document.querySelector('.toast') || {}).textContent); ok('тап по замку — подсказка, урок не открылся', /Сначала пройди/.test(r || '') && await ev(() => !MD.LS()), r);
 
   /* 2. новое правило из вопроса встаёт следующим уроком */
+  // 1.3: настоящий вопрос «материал с курса B2» (новее первого запуска) — его правила первыми, «Из твоего вопроса»
+  r = await ev(() => { const c = document.querySelector('.node.cur'); return { t: c.querySelector('.nc b').textContent, k: c.querySelector('.nc small').textContent, q: c.classList.contains('k-q') }; });
+  ok('материал с курса B2 → «Perfekt: haben или sein» следующим уроком, «Из твоего вопроса»', /haben или sein/.test(r.t) && /Из твоего вопроса/.test(r.k) && r.q, r);
+  // дальше путь — как без свежих вопросов: делаем их «старыми» (число вопросов не меняется)
+  await ev(() => { window.__qd = []; MD_DATA.qs.forEach((q, i) => { if (q.r.includes('haben-sein')) { window.__qd.push([i, q.d]); q.d = '2000-01-01'; } }); MD.render(); });
   r = await ev(() => { const d = new Date(), s = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     MD_DATA.qs.push({ d: s, q: 'тест', r: ['bevor'] }); MD.render(); const c = document.querySelector('.node.cur'); const o = { t: c.querySelector('.nc b').textContent, k: c.querySelector('.nc small').textContent, q: c.classList.contains('k-q') }; MD_DATA.qs.pop(); MD.render(); return o; });
   ok('вопрос после первого запуска → его правило следующим уроком, «Из твоего вопроса»', /bevor/.test(r.t) && /Из твоего вопроса/.test(r.k) && r.q, r);
@@ -170,7 +176,7 @@ const fakeTG = (cloud, local) => `(()=>{window.__cloud=${JSON.stringify(cloud ||
   await click('#lsNext'); ok('«Готово» → справочник', await ev(() => !!document.querySelector('.rr')));
   await click('[data-ref="words"]');
   r = await ev(() => ({ cats: document.querySelectorAll('details.cat').length, open: document.querySelectorAll('details.cat[open]').length }));
-  ok('слова: 4 раздела, все свёрнуты', r.cats === 4 && r.open === 0, r);
+  ok(`слова: ${CATS_N} разделов, все свёрнуты`, r.cats === CATS_N && r.open === 0, r);
   await click('details.cat[data-c="live"] summary');
   r = await ev(() => ({ packs: document.querySelectorAll('details.cat[data-c="live"] .pk').length, ok: document.querySelectorAll('details.cat[data-c="live"] .okm').length, want: MD.PACKS.filter(p => p.cat === 'live').length }));
   ok('раскрыл «Живой немецкий» — пачки по 5 с ✓', r.packs === r.want && r.ok === r.packs, r);
@@ -183,9 +189,13 @@ const fakeTG = (cloud, local) => `(()=>{window.__cloud=${JSON.stringify(cloud ||
   r = await ev(() => { const bad = []; let n = 0; for (const p of MD.PACKS) { MD.lessonOpen(p.id); for (let i = 0; i < p.ws.length; i++) { const L = MD.LS(); const w = p.ws[L.i];
       const t = document.querySelector('.stp').innerText; if (!t.includes(w.w) || !t.includes(w.ru) || !document.querySelector('.stp .ex')) bad.push(w.id); n++; if (L.i < p.ws.length - 1) document.querySelector('#lsNx').click(); } MD.back(); } return { n, bad }; });
   ok(`все ${DATA.words} слов — карточками в пачках: слово, перевод, пример`, r.n === DATA.words && !r.bad.length, r);
+  await ev(() => { (window.__qd || []).forEach(([i, d]) => MD_DATA.qs[i].d = d); window.__qd = []; });   // даты вопросов — как в данных
   await click('[data-ref="qs"]');
-  r = await ev(() => ({ n: document.querySelectorAll('.qi').length, d: [...document.querySelectorAll('.refb h2')].map(x => x.textContent) }));
-  ok(`вопросы: ${DATA.qs}, по датам, новые сверху`, r.n === DATA.qs && r.d[0] === '13 октября 2026', r);
+  r = await ev(() => { const M = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    const d = [...document.querySelectorAll('.refb h2')].map(x => x.textContent), k = d.map(t => { const [dd, mm, yy] = t.split(' '); return +yy * 1e4 + (M.indexOf(mm) + 1) * 100 + +dd; });
+    const newest = MD_DATA.qs.map(q => q.d).sort().pop().split('-').map(Number);
+    return { n: document.querySelectorAll('.qi').length, d, desc: k.every((x, i) => !i || x <= k[i - 1]), top: k[0] === newest[0] * 1e4 + newest[1] * 100 + newest[2] }; });
+  ok(`вопросы: ${DATA.qs}, по датам, новые сверху`, r.n === DATA.qs && r.desc && r.top, r);
   await ovf('справочник вопросы');
   await click('.ql [data-rule="bevor"]'); r = await ev(() => MD.LS() && MD.LS().l.id); ok('вопрос → урок по правилу', r === 'r:bevor', r);
   await ev(() => window.__back()); await wt(100);

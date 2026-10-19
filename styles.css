@@ -517,6 +517,7 @@ html[data-skin="duo"] .node.lock .nd{background:#E5E5E5;box-shadow:0 7px 0 #CECE
 html[data-skin="duo"] .nt{align-items:center;max-width:190px;margin-top:6px}
 html[data-skin="duo"] .nt small{display:none}
 html[data-skin="duo"] .nt b{font-size:14px;color:var(--mut)}
+html[data-skin="duo"] .nt b{max-width:100%}
 html[data-skin="duo"] .node.cur{flex-direction:column;align-items:center;width:100%;transform:none;padding:6px 0 0}
 html[data-skin="duo"] .node.cur .nd{width:84px;height:76px;margin:0;animation:bounce 1.8s ease-in-out infinite;box-shadow:0 8px 0 #4CAD02,0 0 0 8px #fff,0 0 0 12px #E5E5E5}
 html[data-skin="duo"] .node.cur.k-w .nd{box-shadow:0 8px 0 #1899D6,0 0 0 8px #fff,0 0 0 12px #E5E5E5}

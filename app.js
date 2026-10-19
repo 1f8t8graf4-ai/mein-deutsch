@@ -12,8 +12,8 @@ const RBY = {}, WBY = {};
 D.rules.forEach(r => RBY[r.id] = r); D.words.forEach(w => WBY[w.id] = w);
 const DAY = 864e5, DAYS = [1, 3, 7, 21, 60];
 const ST = { n: 'нейтрально', r: 'разговорное', s: 'сленг', o: 'официально' };
-const CATS = [['base', 'Базовые слова'], ['live', 'Живой немецкий'], ['char', 'Характер'], ['b2', 'К экзамену B2']]; // порядок в пути
-const CAT_SHORT = { base: 'база', live: 'живой немецкий', char: 'характер', b2: 'к экзамену B2' };
+const CATS = [['kurs', 'С курса B2'], ['base', 'Базовые слова'], ['live', 'Живой немецкий'], ['char', 'Характер'], ['b2', 'К экзамену B2']]; // порядок в пути
+const CAT_SHORT = { kurs: 'с курса B2', base: 'база', live: 'живой немецкий', char: 'характер', b2: 'к экзамену B2' };
 const CAT_NAME = Object.fromEntries(CATS);
 const SKINS = [['kino', 'Кино'], ['book', 'Учебник'], ['duo', 'Яркий']];
 const SKIN_BG = { kino: '#0b0b0d', book: '#F4EEE1', duo: '#FFFFFF' };
@@ -505,10 +505,12 @@ function refHTML() {
   const body = { my: myHTML, rules: refRulesHTML, words: refWordsHTML, qs: qsBody }[F.ref] || refRulesHTML;
   return `${head('Справочник')}${stabs([['my', 'Мои слова', S.my.length], ['rules', 'Правила', 0], ['words', 'Слова', 0], ['qs', 'Вопросы', 0]], F.ref, 'ref')}<div class="refb">${body()}</div>`;
 }
-function refRulesHTML() {
-  const lv = LV.filter(l => D.rules.some(r => r.lvl === l));
+function refRulesHTML() { // 1.3: правила со своей группой (grp: «Грамматика B2» — с курса) — отдельным разделом сверху, остальные по уровням
+  const grps = [...new Set(D.rules.map(r => r.grp).filter(Boolean))], lv = LV.filter(l => D.rules.some(r => r.lvl === l && !r.grp));
+  const row = x => `<button class="rr" data-lsn="${x.id}"><span class="tx"><b>${esc(x.title)}</b></span>${S.ls[x.id] ? `<span class="okm">${IC.check}</span>` : '<span class="chev">›</span>'}</button>`;
   return `<p class="lead">Нажми — правило откроется по шагам. Целиком — кнопка «Конспект».</p>
-    ${lv.map(l => `<h2>${l}</h2><div class="list">${RLESS.filter(x => x.r.lvl === l).map(x => `<button class="rr" data-lsn="${x.id}"><span class="tx"><b>${esc(x.title)}</b></span>${S.ls[x.id] ? `<span class="okm">${IC.check}</span>` : '<span class="chev">›</span>'}</button>`).join('')}</div>`).join('')}`;
+    ${grps.map(g => `<h2>${esc(g)}</h2><div class="list">${D.rules.filter(r => r.grp === g).map(r => row(LBY['r:' + r.id])).join('')}</div>`).join('')}
+    ${lv.map(l => `<h2>${l}</h2><div class="list">${RLESS.filter(x => x.r.lvl === l && !x.r.grp).map(row).join('')}</div>`).join('')}`;
 }
 function refWordsHTML() {
   return `<p class="lead">Слова пачками по 5: нажми — карточки по одной, в конце проверка.</p>

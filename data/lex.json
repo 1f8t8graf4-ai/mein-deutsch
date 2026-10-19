@@ -1818,5 +1818,376 @@
 "ein",
 "неопределённый артикль (разг.)",
 "'n = ein"
+],
+"abschickst": [
+"abschicken",
+"(ты) отправляешь",
+"отделяемый: du schickst ab, но …, bevor du abschickst"
+],
+"anfängt": [
+"anfangen",
+"начинает",
+"отделяемый: er fängt an, но …, wer anfängt"
+],
+"angebot": [
+"das Angebot, -e",
+"предложение (товара, услуги); выбор"
+],
+"arbeiten": [
+"arbeiten",
+"работать"
+],
+"aufgewacht": [
+"aufwachen",
+"проснулся",
+"Partizip II, Perfekt с sein"
+],
+"ausbildung": [
+"die Ausbildung, -en",
+"обучение профессии"
+],
+"auto": [
+"das Auto, -s",
+"машина"
+],
+"begonnen": [
+"beginnen",
+"начал",
+"Partizip II (beginnen — begann — hat begonnen)"
+],
+"bekomme": [
+"bekommen",
+"получаю / получу"
+],
+"bekommen": [
+"bekommen",
+"получать; получил",
+"bekommen — bekam — hat bekommen; не «становиться»!"
+],
+"beruflichen": [
+"beruflich",
+"рабочий, профессиональный"
+],
+"bewerbung": [
+"die Bewerbung, -en",
+"заявка на работу, резюме с письмом"
+],
+"bleib": [
+"bleiben",
+"оставайся (повелит.)",
+"Bleib dran! — не бросай!"
+],
+"dauert": [
+"dauern",
+"длится"
+],
+"dran": [
+"dran",
+"= daran; в dranbleiben — «не бросать»"
+],
+"egal": [
+"egal",
+"всё равно, неважно"
+],
+"ende": [
+"das Ende, -n",
+"конец",
+"zu Ende sein — закончиться"
+],
+"etwas": [
+"etwas",
+"что-то, что-нибудь"
+],
+"feiere": [
+"feiern",
+"праздную / отпраздную"
+],
+"fern": [
+"fern",
+"далеко; в fernsehen — смотреть ТВ",
+"отделяемый: ich sehe fern"
+],
+"festen": [
+"fest",
+"постоянный, твёрдый",
+"einen festen Vertrag — постоянный договор"
+],
+"frage": [
+"die Frage, -n",
+"вопрос"
+],
+"fremd": [
+"fremd",
+"чужой, незнакомый"
+],
+"gefreut": [
+"sich freuen",
+"обрадовался",
+"Partizip II"
+],
+"geh": [
+"gehen",
+"иди (повелит.)",
+"Geh mir nicht auf … — не действуй мне на …"
+],
+"gekommen": [
+"kommen",
+"пришёл, приехал",
+"Partizip II, Perfekt с sein"
+],
+"gesetzt": [
+"setzen",
+"посадил; (sich) сел",
+"Partizip II, Perfekt с haben"
+],
+"gestern": [
+"gestern",
+"вчера"
+],
+"gewohnt": [
+"wohnen",
+"жил",
+"Partizip II"
+],
+"halbes": [
+"halb",
+"половина",
+"ein halbes Jahr — полгода"
+],
+"hatte": [
+"haben",
+"имел, у меня было",
+"Präteritum: ich hatte"
+],
+"hatten": [
+"haben",
+"имели, у нас было",
+"Präteritum: wir hatten"
+],
+"informatiker": [
+"der Informatiker, -",
+"айтишник, программист"
+],
+"intensiv": [
+"intensiv",
+"активно, интенсивно"
+],
+"job": [
+"der Job, -s",
+"работа (разг.)"
+],
+"jobcenter": [
+"das Jobcenter, -",
+"джобцентр (биржа труда)"
+],
+"kalt": [
+"kalt",
+"холодный, холодно"
+],
+"kam": [
+"kommen",
+"пришёл",
+"Präteritum: ich kam"
+],
+"keinen": [
+"kein",
+"никакой, не (перед сущ.)",
+"Akkusativ мужского рода"
+],
+"komme": [
+"kommen",
+"прихожу, приезжаю"
+],
+"kommen": [
+"kommen",
+"приходить, приезжать"
+],
+"kultur": [
+"die Kultur, -en",
+"культура"
+],
+"kulturelle": [
+"kulturell",
+"культурный"
+],
+"minuten": [
+"die Minute, -n",
+"минута"
+],
+"nehmen": [
+"nehmen",
+"брать",
+"Urlaub nehmen — брать отпуск"
+],
+"nerv": [
+"nerven",
+"доставай, нервируй (повелит.)",
+"Nerv nicht! — не доставай!"
+],
+"neue": [
+"neu",
+"новый"
+],
+"neuen": [
+"neu",
+"новый"
+],
+"nutze": [
+"nutzen",
+"пользуюсь"
+],
+"oben": [
+"oben",
+"наверху"
+],
+"passiert": [
+"passieren",
+"случилось",
+"Partizip II, Perfekt с sein: Was ist passiert?"
+],
+"probezeit": [
+"die Probezeit, -en",
+"испытательный срок"
+],
+"repariert": [
+"reparieren",
+"ремонтируют / отремонтирован",
+"Partizip II (без ge-: на -ieren)"
+],
+"rufen": [
+"anrufen",
+"звонить",
+"отделяемый: Rufen Sie an!"
+],
+"sack": [
+"der Sack, Säcke",
+"мешок; грубо — мошонка",
+"Geh mir nicht auf den Sack! — не еби мозги"
+],
+"schaffst": [
+"schaffen",
+"справишься, получится",
+"Du schaffst das! — у тебя получится!"
+],
+"seitdem": [
+"seitdem",
+"с тех пор как",
+"союз: глагол в конец"
+],
+"siezt": [
+"siezen",
+"обращается на «вы»",
+"man siezt sich — обращаются на «вы»"
+],
+"stelle": [
+"die Stelle, -n",
+"должность, место работы"
+],
+"stress": [
+"der Stress",
+"стресс"
+],
+"studiert": [
+"studieren",
+"учился (в вузе)",
+"Partizip II (на -ieren, без ge-)"
+],
+"stuttgart": [
+"Stuttgart",
+"Штутгарт (город)"
+],
+"umgezogen": [
+"umziehen",
+"переехал",
+"Partizip II, Perfekt с sein"
+],
+"unbefristeten": [
+"unbefristet",
+"бессрочный"
+],
+"unterschied": [
+"der Unterschied, -e",
+"разница, отличие"
+],
+"verarsch": [
+"verarschen",
+"не прикалывайся (грубо, повелит.)",
+"Verarsch mich nicht! — не пудри мозги!"
+],
+"vergesse": [
+"vergessen",
+"забываю"
+],
+"vertrag": [
+"der Vertrag, Verträge",
+"договор"
+],
+"viel": [
+"viel",
+"много"
+],
+"vollzeit": [
+"die Vollzeit",
+"полный рабочий день",
+"in Vollzeit arbeiten"
+],
+"wer": [
+"wer",
+"кто"
+],
+"werde": [
+"werden",
+"стану; буду",
+"ich werde"
+],
+"wg": [
+"die WG, -s",
+"квартира на несколько жильцов",
+"Wohngemeinschaft"
+],
+"wird": [
+"werden",
+"становится; будет; (Passiv) делают",
+"er/sie/es wird"
+],
+"wollen": [
+"wollen",
+"хотеть",
+"Wollen wir …? — давай …?"
+],
+"würde": [
+"werden",
+"бы",
+"ich würde gern … — я бы с удовольствием …"
+],
+"zusage": [
+"die Zusage, -n",
+"согласие, положительный ответ"
+],
+"zwischen": [
+"zwischen",
+"между"
+],
+"alm": [
+"die Alm, Almen",
+"альпийское пастбище",
+"auf der Alm — где, auf die Alm — куда"
+],
+"verspätung": [
+"die Verspätung, -en",
+"опоздание, задержка"
+],
+"duzen": [
+"duzen",
+"обращаться на «ты»"
+],
+"siezen": [
+"siezen",
+"обращаться на «вы»"
+],
+"dranbleiben": [
+"dranbleiben",
+"не бросать; оставаться на линии",
+"bleibt dran – ist drangeblieben"
 ]
 }
