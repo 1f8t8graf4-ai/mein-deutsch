@@ -1,7 +1,8 @@
 /* «Мой немецкий» — мини-апп. Без сборщиков: один файл.
    Данные — window.MD_DATA из data/all-data.js (собирает tools/rebuild.py из data/*.json).
    Прогресс — localStorage (md_v1) + Telegram CloudStorage (кусками md_0…, md_n).
-   1.2: путь уроков (всё по шагу на экран), справочник, «Мои слова» как в «Языках по кино», 3 вида на пробу. */
+   1.2: путь уроков (всё по шагу на экран), справочник, «Мои слова» как в «Языках по кино», 3 вида на пробу.
+   1.4: будильники в стиле iPhone — remind.js (колокольчик в шапке, RMIND). */
 (function () {
 'use strict';
 const TG = window.Telegram && Telegram.WebApp && Telegram.WebApp.platform && Telegram.WebApp.platform !== 'unknown' ? Telegram.WebApp : null;
@@ -33,9 +34,10 @@ const IC = {
   q: svg('<path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.2a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9M12 13.6v.1"/>'),
   rep: svg('<path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/>'),
   plus: svg('<path d="M12 5v14M5 12h14"/>'),
+  bell: svg('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>'),
 };
-// шапка вкладки: заголовок + поиск и настройки
-const head = t => `<div class="hd"><h1>${esc(t)}</h1><button class="ic" data-act="search" aria-label="Поиск">${IC.search}</button><button class="ic" data-act="set" aria-label="Настройки">${IC.set}</button></div>`;
+// шапка вкладки: заголовок + будильники (точка — есть включённый), поиск и настройки
+const head = t => `<div class="hd"><h1>${esc(t)}</h1><button class="ic bell${window.RMIND && RMIND.anyOn() ? ' has' : ''}" data-act="remind" aria-label="Будильники">${IC.bell}</button><button class="ic" data-act="search" aria-label="Поиск">${IC.search}</button><button class="ic" data-act="set" aria-label="Настройки">${IC.set}</button></div>`;
 // подвкладки текстом: [[значение, подпись, число]], cur — выбранное, attr — data-атрибут
 const stabs = (items, cur, attr) => `<div class="stabs">${items.map(([v, t, n]) => `<button class="${v === cur ? 'on' : ''}" data-${attr}="${esc(v)}">${esc(t)}${n ? `<small>${n}</small>` : ''}</button>`).join('')}</div>`;
 const pl = (n, f) => f[(n % 10 === 1 && n % 100 !== 11) ? 0 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 1 : 2];
@@ -103,6 +105,7 @@ function grade(key, ok) { // ok — верно с первой попытки
   if (ok) { step = Math.min(step + 1, DAYS.length); e[1] = dayStart(now()) + DAYS[step - 1] * DAY; }
   else { step = 0; e[1] = dayStart(now()) + DAY; }
   S.srs[key] = [step, e[1], now()];
+  if (window.RMIND) RMIND.mark(); // неделя в «Будильниках»: в какие дни занимался
 }
 const isDue = k => S.srs[k] && S.srs[k][1] <= now();
 const dueKeys = () => Object.keys(S.srs).filter(isDue).filter(keyOk).sort((a, b) => S.srs[a][1] - S.srs[b][1]);
@@ -312,12 +315,13 @@ try { const t = sessionStorage.getItem('md_tab'); TAB = ['learn', 'rep', 'ref'].
 function go(page) { page.y = window.scrollY; STACK.push(page); render(); window.scrollTo(0, 0); } // y — куда вернуть прокрутку по «назад»
 function swap(page) { const p = STACK.pop(); page.y = p ? p.y : 0; STACK.push(page); render(); window.scrollTo(0, 0); } // заменить верхнюю страницу
 function back() {
+  if (window.RMIND && RMIND.close()) return;
   if (closeSheet()) return;
   if (STACK.length) { const p = STACK.pop(); if (p.quiz) QZ = null; if (p.lesson) LS = null; render(); if (p.y != null) window.scrollTo(0, p.y); }
 }
 function backSync() {
   if (!TG || !TG.BackButton) return;
-  STACK.length || sheetOn ? TG.BackButton.show() : TG.BackButton.hide();
+  STACK.length || sheetOn || (window.RMIND && RMIND.isOpen()) ? TG.BackButton.show() : TG.BackButton.hide();
 }
 function tabGo(t) {
   TAB = t; STACK = []; QZ = null; LS = null; closeSheet();
@@ -817,7 +821,7 @@ function bindTab(m) {
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-say],.w,[data-rule],[data-word],[data-my],[data-act],[data-lsn],[data-lock],[data-tabgo],[data-mdel]');
   if (!t) return;
-  if (t.dataset.act) { t.dataset.act === 'search' ? searchOpen() : settings(); return; }
+  if (t.dataset.act) { const a = t.dataset.act; if (a === 'remind') { haptic(); if (window.RMIND) RMIND.open(); } else a === 'search' ? searchOpen() : settings(); return; }
   if (t.dataset.say !== undefined) { say(t.dataset.say, !!t.dataset.slow); return; }
   if (t.classList.contains('w')) { wordPop(t); return; }
   if (t.dataset.lsn) { haptic(); lessonOpen(t.dataset.lsn); return; }
@@ -861,5 +865,9 @@ render();
 cloudRead();
 remindSync(false);
 window.MD = { S: () => S, grade, render, go, back, dueKeys, runQuiz, RBY, itemOf, QZ: () => QZ, LS: () => LS, path: buildPath, lessonOpen, myQuiz, PACKS, // для проверки (tests/app.js)
-  konspekt: id => go({ r: () => rulePage(RBY[id]), bind: m => bindRule(m, RBY[id]) }), tab: tabGo };
+  konspekt: id => go({ r: () => rulePage(RBY[id]), bind: m => bindRule(m, RBY[id]) }), tab: tabGo,
+  // для remind.js: напоминание от бота (то же, что в настройках) и кнопка «назад» Телеграма
+  rem: () => ({ on: !!S.opt.rem, hh: S.opt.hh, api: !!window.MD_API }),
+  remSet: (on, hh) => { S.opt.rem = !!on; if (hh) S.opt.hh = hh; save(); remindSync(true); },
+  backSync };
 })();

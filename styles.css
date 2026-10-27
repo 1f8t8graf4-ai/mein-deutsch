@@ -553,3 +553,7 @@ html[data-skin="duo"] .sh{border-top:2px solid #E5E5E5}
 html[data-skin="duo"] .fb{border-left-width:4px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ===== 1.4 — будильники: колокольчик в шапке (сама шторка — стили в remind.js) ===== */
+.ic.bell{position:relative}
+.ic.bell.has::after{content:"";position:absolute;top:9px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px var(--bg)}
