@@ -24,9 +24,13 @@
 
   // рука в пиджаке над клавишами: x, y — костяшки; side: -1 левая, 1 правая; dn — нажатие 0…1
   function typingHand(x, y, side, dn, W0) {
-    const q = poly([[-90, 520], [150, 520], [110, 150], [-50, 150]], W0.d0) + poly([[-56, 190], [114, 190], [110, 130], [-50, 130]], K.paper) + ln('M-56 190H114', 1, K.paper2, 4) +
-      [0, 1, 2, 3].map(i => sh(D_.rr(-60 + i * 45, -30 + (i === 1 || i === 2 ? -12 : 0) + (i === (side > 0 ? 1 : 2) ? dn * 18 : 0), 42, 96, 21), SKIN, W0.d0, 5)).join('') + sh(D_.rr(side > 0 ? -96 : 112, 44, 46, 92, 23), SKIN, W0.d0, 5) + sh(D_.rr(-70, 14, 200, 160, 60), SKIN, W0.d0, 5) + ln('M-30 40V20M15 34V12M60 34V12M105 40V20', 1, SKIN2, 4);
-    return g(q, at(x, y + dn * 10, 1, side * -7))
+    const FL = [80, 100, 94, 70], FX = [-36, 6, 48, 88], FR = [-9, -3, 3, 10], hot = side > 0 ? 1 : 2;
+    let q = poly([[-78, 540], [176, 540], [132, 118], [-44, 118]], W0.d0) + poly([[-20, 540], [40, 540], [30, 150], [-4, 150]], '#000', .18) +
+      poly([[-48, 152], [136, 152], [130, 92], [-42, 92]], K.paper) + ln('M-48 152H136', 1, K.paper2, 4) + fill(D_.circ(104, 124, 9), K.amber);
+    q += g(sh(D_.rr(-22, -40, 44, 96, 22), SKIN, SKIN2, 4), at(-66, 70, 1, 28));
+    FL.forEach((l, i) => { const p = i === hot ? dn * 14 : 0; q += g(sh(D_.rr(-18, -l + p, 36, l + 20, 18), SKIN, SKIN2, 4) + fill(D_.rr(-11, -l + p + 6, 22, 20, 9), K.paper, .45), at(FX[i], -22, 1, FR[i])) });
+    q += sh('M-52 104C-66 40 -58 -8 -40 -30H104C122 -8 128 40 116 104Z', SKIN, SKIN2, 4) + ln('M-22 -14q12 -10 24 0M20 -18q12 -10 24 0M62 -16q12 -10 24 0', 1, SKIN2, 4);
+    return g(q, `translate(${R(x)} ${R(y + dn * 6)}) rotate(${side * -6}) scale(${side > 0 ? 1 : -1} 1)` + (side > 0 ? '' : ' translate(-60 0)'))
   }
 
   // ---------- КАБИНЕТ 1973: стена с панелями, свет из жалюзи, календарь, стол, пишущая машинка, руки печатают план ----------
@@ -49,14 +53,16 @@
     // календарь
     wall += g(fill(D_.rr(10, 12, 200, 250, 6), W0.d0, .5) + fill(D_.rr(0, 0, 200, 250, 6), K.paper) + fill(D_.rr(0, 0, 200, 62, 6), K.coral) + tx('ФЕВРАЛЬ', 100, 43, { f: 'O', w: 700, s: 30, c: K.paper, ls: 4 }) + tx('1973', 100, 150, { f: 'U', w: 800, s: 58, c: K.ink }) +
       [0, 1, 2, 3, 4, 5, 6].map(i => `<circle cx="${26 + i * 25}" cy="200" r="5" fill="${i === 4 ? K.coral : K.paper2}"/>`).join(''), at(130, 330, 1, -2));
+    wall += g(fill(D_.circ(6, 8, 78), W0.d0, .5) + sh(D_.circ(0, 0, 78), K.paper, W0.d0, 10) + [0, 3, 6, 9].map(i => ln(`M${R(Math.sin(i * Math.PI / 6) * 58)} ${R(-Math.cos(i * Math.PI / 6) * 58)}L${R(Math.sin(i * Math.PI / 6) * 66)} ${R(-Math.cos(i * Math.PI / 6) * 66)}`, 1, K.ink, 6)).join('') + g(ln('M0 0V-36', 1, K.ink, 8), 'rotate(-62)') + g(ln('M0 0V-54', 1, K.ink, 5), `rotate(${R(40 + t * 3)})`) + g(ln('M0 10V-58', 1, K.coral, 3), `rotate(${Math.floor(t * 1) * 6})`) + fill(D_.circ(0, 0, 7), K.ink), at(470, 300));
     // --- стол (средний слой)
     let desk = gpoly([[-300, 1215], [1380, 1215], [1480, 1640], [-400, 1640]], W0.d3, 1, 1, 0, 1215, 0, 1640) + grect(-400, 1215, 1880, 430, W0.d3, W0.d1) + ln('M-300 1215H1380', 1, W0.d4, 5) + grect(-400, 1640, 1880, 400, W0.d0, W0.d0);
     // лампа: свет на стол
     desk += gpoly([[120, 930], [250, 930], [470, 1330], [-120, 1330]], K.amber, .34, .03, 0, 930, 0, 1330) + softShadow(180, 1330, 330, 60, .28, K.amber);
     desk += ln('M60 1300L60 1010L170 900', 1, W0.d0, 16) + poly([[90, 870], [250, 850], [290, 940], [80, 950]], K.coral) + poly([[170, 859], [250, 850], [290, 940], [200, 944]], W0.d3, .55) + fill(D_.ell(60, 1306, 86, 22), W0.d0);
+    desk += softShadow(1000, 1262, 150, 22, .5) + [0, 1, 2].map(i => fill(D_.rr(900 + i * 6, 1232 - i * 26, 210, 24, 4), i === 1 ? K.paper2 : K.paper) + fill(D_.rr(900 + i * 6, 1232 - i * 26, 46, 24, 4), i === 2 ? K.coral : W0.d3)).join('');
     // пепельница, сигарета, дым
-    desk += softShadow(905, 1330, 130, 30, .5) + fill(D_.ell(900, 1300, 96, 30), W0.d0) + fill(D_.ell(900, 1292, 80, 20), W0.d2) + g(fill(D_.rr(-70, -9, 120, 18, 5), K.paper) + fill(D_.rr(-88, -9, 22, 18, 5), K.amber) + fill(D_.rr(34, -9, 30, 18, 5), '#E8A04A'), at(905, 1280, 1, -14)) +
-      ln(smokeD(828, 1298, 620, t, 46, 110), 1, K.paper, 6, { op: .32 }) + ln(smokeD(832, 1296, 520, t + 2, 30, 60), 1, K.paper, 4, { op: .2 });
+    desk += softShadow(945, 1420, 130, 30, .5) + fill(D_.ell(940, 1390, 96, 30), W0.d0) + fill(D_.ell(940, 1382, 80, 20), W0.d2) + g(fill(D_.rr(-70, -9, 120, 18, 5), K.paper) + fill(D_.rr(-88, -9, 22, 18, 5), K.amber) + fill(D_.rr(34, -9, 30, 18, 5), '#E8A04A'), at(945, 1370, 1, -14)) +
+      ln(smokeD(868, 1388, 700, t, 46, 110), 1, K.paper, 6, { op: .32 }) + ln(smokeD(872, 1386, 580, t + 2, 30, 60), 1, K.paper, 4, { op: .2 });
     // --- машинка: лист, валик, корпус, клавиши
     const lines = Math.min(3, Math.floor(P01(t, q.quote + .1, Math.max(1, q.quoteE - q.quote - .9)) * 4)), feed = 52 * (hdr >= 1 ? 1 : 0) + lines * 56, py = 700 - feed;
     let nn = t < q.quote ? 0 : n, tw0 = '';
@@ -65,12 +71,14 @@
     let paper = fill(D_.rr(334, py + 14, 430, 620, 4), W0.d0, .45) + fill(D_.rr(322, py, 430, 620, 4), K.paper) + clip(D_.rr(322, py, 430, 620, 4), ht(D_.poly([[600, py + 620], [752, py + 380], [752, py + 620]]), 'navy', .12)) +
       tx('ПЛАН'.slice(0, Math.ceil(hdr * 4)), 352, py + 92, { f: MONO, w: 700, s: 66, c: K.coral, a: 'start' }) + (hdr >= 1 ? tx('R.J. REYNOLDS TOBACCO CO.', 352, py + 136, { f: MONO, w: 700, s: 21, c: K.navy, a: 'start', op: .8 }) + tx('2 ФЕВРАЛЯ 1973 · СЕКРЕТНО', 352, py + 164, { f: MONO, w: 700, s: 21, c: K.navy, a: 'start', op: .8 }) + ln(`M352 ${py + 186}H722`, 1, K.navy, 3, { op: .45 }) : '') + tw0;
     if (rk > 0) paper += ln(`M346 ${yy - 22}C440 ${yy - 44} 690 ${yy - 42} 742 ${yy - 10}C768 ${yy + 22} 640 ${yy + 40} 500 ${yy + 38}C390 ${yy + 36} 320 ${yy + 22} 338 ${yy - 14}C346 ${yy - 28} 380 ${yy - 36} 420 ${yy - 39}`, rk, K.coral, 7);
-    const car = typing ? -((tick % 9) * 5) : 0;  // каретка едет влево, пока печатают
+    let cl = hdr < 1 ? hdr * 4 : 0; { let k = t < q.quote ? 0 : n; for (const s0 of PLAN) { if (k <= 0) break; cl = Math.min(k, s0.length); k -= s0.length } }
+    const car = typing ? 70 - cl * 8 : 0;  // каретка: лист едет влево по мере печати, на новой строке возвращается
     let tw = g(clip(D_.rr(250, 300, 580, 716, 0), paper), `translate(${car} 0)`);
     tw += g(fill(D_.rr(236, 1000, 608, 62, 31), W0.d0) + ln('M270 1016H810', 1, W0.d3, 4, { op: .7 }) + fill(D_.circ(222, 1031, 34), W0.d0) + fill(D_.circ(858, 1031, 34), W0.d0) + ln('M858 1031h54', 1, W0.d0, 12) + fill(D_.circ(222, 1031, 12), W0.d3), `translate(${car} 0)`);
     tw += softShadow(540, 1345, 470, 46, .55) + gpoly([[200, 1058], [880, 1058], [950, 1330], [130, 1330]], '#0A0D22', 1, 1, 0, 0, 0, 1) + poly([[200, 1058], [880, 1058], [950, 1330], [130, 1330]], '#0B0E24') + poly([[200, 1058], [880, 1058], [896, 1100], [184, 1100]], '#1B2148') + ln('M200 1058H880', 1, '#3A4792', 4) +
       fill(D_.rr(440, 1068, 200, 24, 6), K.amber, .9) + tx('R E Y N O L D S', 540, 1087, { f: 'O', w: 700, s: 17, c: '#0B0E24' });
     for (let r = 0; r < 3; r++) for (let c = 0; c < 10 - r; c++) { const kx = 236 + r * 30 + c * 66, ky = 1146 + r * 62, hit = typing && dn && ((tick * 7 + r * 3) % (10 - r) === c) && (tick % 3 === r); tw += fill(D_.ell(kx, ky + (hit ? 8 : 0) + 7, 25, 19), '#05071A') + fill(D_.ell(kx, ky + (hit ? 8 : 0), 25, 19), hit ? K.amber : '#1B2148') + ln(D_.ell(kx, ky + (hit ? 8 : 0), 25, 19), 1, K.paper2, 2.5, { op: .8 }) }
+    if (typing && dn) tw += ln(`M${500 + (tick % 4) * 26} 1072L540 ${1004}`, 1, '#3A4792', 5) + fill(D_.circ(540, 1002, 7), K.paper2);
     // --- руки (ближний слой)
     const hl = typing && dn && tick % 2 === 0 ? 1 : 0, hr = typing && dn && tick % 2 === 1 ? 1 : 0;
     const hands = typingHand(330, 1370, -1, hl, W0) + typingHand(640, 1376, 1, hr, W0);
@@ -87,7 +95,7 @@
   const VP = [540, 800], DD = 1.7, NS = 7;
   const sc = d => 1 / (1 + 3.3 * d), PP = (x, y, d) => [VP[0] + (x - VP[0]) * sc(d), VP[1] + (y - VP[1]) * sc(d)];
   function corridor(t) {
-    const q = Q, W0 = WORLD.navy, a = q.arch, put = E(t, q.pom - .9, 1.0, 'io'), opn = E(t, q.otkr - .25, 1.1, 'o'), dolly = E(t, a, q.archE - a + .5, 'io');
+    const q = Q, W0 = WORLD.navy, a = q.arch, put = E(t, a + .1, 1.1, 'io'), mk = P01(t, q.mln - .1, 1.4), opn = E(t, q.otkr - .25, 1.1, 'o'), dolly = E(t, a, q.archE - a + .5, 'io');
     const XL = -170, XR = 1250, YT = 40, YB = 1660;
     const lit = i => clamp(1 - clamp((t - (q.arh - .15) - (NS - 1 - i) * .16) * 5) + opn * (.25 + .5 * (i / NS)));   // лампы гаснут от дальней к ближней
     let s = grect(-300, -200, 1680, 2300, W0.d0, W0.d0);
@@ -113,7 +121,7 @@
             const e0 = d0 + .03 + b * (d1 - d0 - .06) / 2 + .008, e1 = e0 + (d1 - d0 - .06) / 2 - .016, our = side === 1 && i === 1 && lv === 2 && b === 0;
             s += poly([PP(Xi, y0, e0), PP(Xi, y1, e0), PP(Xi, y1, e1), PP(Xi, y0, e1)], our ? mix(W0.d3, K.coral, .25 + .75 * put) : tone(.55 + .4 * rnd(i * 31 + lv * 7 + b * 3 + side)));
             const m0 = e0 + (e1 - e0) * .28, m1 = e0 + (e1 - e0) * .72;
-            s += poly([PP(Xi, y0 + 90, m0), PP(Xi, y0 + 150, m0), PP(Xi, y0 + 150, m1), PP(Xi, y0 + 90, m1)], our ? K.paper : mix(W0.d0, K.paper, .1 + .5 * L), our ? put : 1)
+            s += poly([PP(Xi, y0 + 90, m0), PP(Xi, y0 + 150, m0), PP(Xi, y0 + 150, m1), PP(Xi, y0 + 90, m1)], our ? K.paper : mix(W0.d0, K.paper, clamp(.1 + .5 * L + .5 * clamp(mk * 2.2 - (NS - i) * .16))), our ? put : 1)
           }
         }
       }
@@ -125,14 +133,15 @@
     // свет из двери по полу
     if (opn > 0) { const dl = PP(VP[0] - 300, YB, DD), dr = PP(VP[0] + 300, YB, DD); s += gpoly([[VP[0] - od / 2, b1[1]], [VP[0] + od / 2, b1[1]], [VP[0] + 520 * opn + 60, 1700], [VP[0] - 520 * opn - 60, 1700]], K.paper, .55 * opn, .04, 0, b1[1], 0, 1700) }
     // год
-    s += g(big(opn > .1 ? '1998' : '1979', 540, 330, K.paper, 150), '', .92);
+    if (opn > .5) { const fy = b1[1], k2 = E(t, q.otkr + .5, .6, 'o'), u = dh * .62; for (const dx of [-.16, .15]) s += g(fill('M-120 170C-120 90 -80 55 -38 48C-68 28 -78 -9 -73 -40C-63 -103 63 -103 73 -40C78 -9 68 28 38 48C80 55 120 90 120 170V560H-120Z', W0.d0), at(VP[0] + dw * dx, fy - u * k2 + u * .2, u / 560)) }
+    s += mk > 0 ? g(odo(lerp(0, 14e6, EZ.o(mk)), 540, 320, { f: 'U', w: 800, s: 92, sep: ' ', c: K.paper }) + lab('ДОКУМЕНТОВ', 540, 384, K.paper, 40, { ls: 12 }), '', clamp(mk * 5)) : g(big(opn > .1 ? '1998' : '1979', 540, 330, K.paper, 150), '', .92);
     // рука в пиджаке несёт папку к полке
     if (put < 1) {
       const tp = PP(XR - 250, YT + 150 + 2 * 300 + 120, 1 * DD / NS + .08), hx0 = lerp(1250, tp[0] + 40, put), hy0 = lerp(1560, tp[1] + 30, put), hs = lerp(1.15, .34, put);
       s += g(poly([[60, 60], [520, 300], [560, 420], [40, 200]], '#05071A') + poly([[40, 40], [110, 76], [104, 150], [28, 112]], K.paper) + sh(D_.rr(-70, -40, 150, 130, 40), SKIN, W0.d0, 5) +
         g(sh('M-300 -210H-110L-70 -262H300V230H-300Z', K.paper2, W0.d0, 6) + sh(D_.rr(-300, -160, 600, 390, 12), K.paper, W0.d0, 6) + tx('ПЛАН', 0, 60, { f: MONO, w: 700, s: 130, c: K.coral }), at(-150, -90, .62, -12)) + sh(D_.rr(-64, -30, 60, 110, 28), SKIN, W0.d0, 5), at(hx0, hy0, hs, 0), clamp((1 - put) * 5));
     }
-    cue(q.pom - .9, 'swish', .5); cue(q.pom + .05, 'thud', .7); for (let i = 0; i < NS; i++) cue(q.arh - .15 + i * .16, 'tick', .45, 0); cue(q.otkr - .25, 'whirr', .7);
+    cue(a + .1, 'swish', .5); cue(a + 1.1, 'thud', .7); for (let i = 0; i < NS; i++) cue(q.arh - .15 + i * .16, 'tick', .45, 0); cue(q.otkr - .25, 'whirr', .7);
     return g(s, about(VP[0], VP[1], 1 + .16 * dolly + .1 * opn))
   }
 
@@ -145,7 +154,7 @@
     init(tl, SC) {
       const T = {}; SC.forEach(S => { T[S.key] = S.T });
       Q = { plan: T.plan.s(0), sekr: T.plan.c('секретный'), planE: T.plan.se(1), quote: T.plan.c('получить') - .3, quoteE: T.plan.se(1), mol: T.plan.c('молодёжного'),
-        arch: T.arch.s(0), pom: T.arch.c('поместили'), arh: T.arch.c('архив'), otkr: T.arch.c('открыли'), archE: T.arch.se(1) };
+        arch: T.arch.s(0), arh: T.arch.c('архив') + .45, otkr: T.arch.c('открыть'), mln: T.arch.c('Четырнадцать'), archE: T.arch.se(1) };
       document.getElementById('cap').style.textTransform = 'uppercase';
     }
   };
