@@ -34,7 +34,7 @@ const svg = document.getElementById('S'), capEl = document.getElementById('cap')
 window.loadEp = function (name) {
   const add = src => new Promise(r => { const s = document.createElement('script'); s.src = src; s.onload = r; document.body.appendChild(s) });
   const v8 = /^nic([bhgs]|s[abc])$/.test(name), v5 = v8 || /^(nic(w\d?|max|tyaga|me)|howto)$/.test(name), v6 = /^nicw\d$/.test(name), n9 = /^nics[abc]$/.test(name);
-  return (window.V5 || !v5 ? Promise.resolve() : add('v5.js')).then(() => window.V6 || !v6 ? 0 : add('v6.js')).then(() => window.V8 || !v8 ? 0 : add('v8.js')).then(() => window.N9 || !n9 ? 0 : add('ep/n9lib.js')).then(() => add('ep/' + name + '.js')).then(() => name === 'nicf' ? add('ep/nicf2.js') : 0)
+  return (window.V5 || !v5 ? Promise.resolve() : add('v5.js')).then(() => window.V6 || !v6 ? 0 : add('v6.js')).then(() => window.V8 || !v8 ? 0 : add('v8.js')).then(() => window.N9 || !n9 ? 0 : add('ep/n9lib.js')).then(() => /^nic[pqr]$/.test(name) ? add('ep/nicf.js').then(() => add('ep/nicf2.js')) : 0).then(() => add('ep/' + name + '.js')).then(() => name === 'nicf' ? add('ep/nicf2.js') : 0)
 };
 
 function cueNorm(w) { return String(w).toLowerCase().replace(/[^a-zа-яё0-9%$×+'-]/g, '') }
