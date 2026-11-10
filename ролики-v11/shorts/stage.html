@@ -41,6 +41,7 @@ function cueNorm(w) { return String(w).toLowerCase().replace(/[^a-zа-яё0-9%$�
 
 window.init = function (tl) {
   TL = tl; LANG = tl.lang || 'en'; EP = window.EP; P = EP.P;
+  if (EP.size) { const [w, h] = EP.size; svg.setAttribute('viewBox', `0 0 ${w} ${h}`); for (const el of [document.documentElement, document.body, svg]) { el.style.width = w + 'px'; el.style.height = h + 'px' } }  // 16:9 — EP.size = [1920, 1080]
   SC = []; CH = [];
   for (const s of tl.sent) {
     let S = SC[SC.length - 1];
