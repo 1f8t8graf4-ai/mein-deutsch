@@ -713,3 +713,4 @@ if __name__ == '__main__':
 for _e in ('nicsa-ru', 'nicsb-ru', 'nicsc-ru'):
     DIRECT[_e] = DIRECT10
     SAY[_e] = SAY['nics-ru']
+DIRECT['nicf-ru'] = DIRECT11
