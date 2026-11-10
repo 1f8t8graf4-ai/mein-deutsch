@@ -1,0 +1,140 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:M;font-weight:600;src:url(fonts/manrope-latin-600-normal.woff2)}
+@font-face{font-family:M;font-weight:600;src:url(fonts/manrope-cyrillic-600-normal.woff2);unicode-range:U+0400-04FF,U+2116}
+@font-face{font-family:M;font-weight:800;src:url(fonts/manrope-latin-800-normal.woff2)}
+@font-face{font-family:M;font-weight:800;src:url(fonts/manrope-cyrillic-800-normal.woff2);unicode-range:U+0400-04FF,U+2116}
+@font-face{font-family:O;font-weight:500;src:url(fonts/oswald-latin-500-normal.woff2)}
+@font-face{font-family:O;font-weight:500;src:url(fonts/oswald-cyrillic-500-normal.woff2);unicode-range:U+0400-04FF}
+@font-face{font-family:O;font-weight:700;src:url(fonts/oswald-latin-700-normal.woff2)}
+@font-face{font-family:O;font-weight:700;src:url(fonts/oswald-cyrillic-700-normal.woff2);unicode-range:U+0400-04FF}
+@font-face{font-family:U;font-weight:700;src:url(fonts/unbounded-latin-700-normal.woff2)}
+@font-face{font-family:U;font-weight:700;src:url(fonts/unbounded-cyrillic-700-normal.woff2);unicode-range:U+0400-04FF}
+@font-face{font-family:U;font-weight:800;src:url(fonts/unbounded-latin-800-normal.woff2)}
+@font-face{font-family:U;font-weight:800;src:url(fonts/unbounded-cyrillic-800-normal.woff2);unicode-range:U+0400-04FF}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#S{position:absolute;left:0;top:0;width:1080px;height:1920px}
+#grain{position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;pointer-events:none;opacity:.55}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 85% 70% at 50% 42%,rgba(0,0,0,0) 58%,rgba(0,0,0,.30) 100%)}
+#cap{position:absolute;left:60px;right:60px;top:1330px;height:170px;display:flex;align-items:center;justify-content:center;
+  font:800 64px/1.12 M;color:#fff;text-align:center;letter-spacing:-.01em;
+  --st:#0B1020;text-shadow:6.0px 0.0px 0 var(--st),5.5px 2.3px 0 var(--st),4.2px 4.2px 0 var(--st),2.3px 5.5px 0 var(--st),0.0px 6.0px 0 var(--st),-2.3px 5.5px 0 var(--st),-4.2px 4.2px 0 var(--st),-5.5px 2.3px 0 var(--st),-6.0px 0.0px 0 var(--st),-5.5px -2.3px 0 var(--st),-4.2px -4.2px 0 var(--st),-2.3px -5.5px 0 var(--st),-0.0px -6.0px 0 var(--st),2.3px -5.5px 0 var(--st),4.2px -4.2px 0 var(--st),5.5px -2.3px 0 var(--st),0 6px 18px rgba(0,0,0,.45)}
+#cap .w{display:inline-block;margin:0 .13em;transition:none}
+#cap .u{color:#B9BDC9!important}
+</style></head>
+<body>
+<svg id="S" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920"></svg>
+<div id="grain"></div><div id="vig"></div><div id="cap"></div>
+<script src="lib.js"></script>
+<script>
+let TL = null, SC = [], CH = [], EP = null;
+const svg = document.getElementById('S'), capEl = document.getElementById('cap'), grainEl = document.getElementById('grain');
+
+window.loadEp = function (name) {
+  const add = src => new Promise(r => { const s = document.createElement('script'); s.src = src; s.onload = r; document.body.appendChild(s) });
+  const v8 = /^nic([bhgs]|s[abc])$/.test(name), v5 = v8 || /^(nic(w\d?|max|tyaga|me)|howto)$/.test(name), v6 = /^nicw\d$/.test(name), n9 = /^nics[abc]$/.test(name);
+  return (window.V5 || !v5 ? Promise.resolve() : add('v5.js')).then(() => window.V6 || !v6 ? 0 : add('v6.js')).then(() => window.V8 || !v8 ? 0 : add('v8.js')).then(() => window.N9 || !n9 ? 0 : add('ep/n9lib.js')).then(() => add('ep/' + name + '.js')).then(() => name === 'nicf' ? add('ep/nicf2.js') : 0)
+};
+
+function cueNorm(w) { return String(w).toLowerCase().replace(/[^a-zа-яё0-9%$×+'-]/g, '') }
+
+window.init = function (tl) {
+  TL = tl; LANG = tl.lang || 'en'; EP = window.EP; P = EP.P;
+  SC = []; CH = [];
+  for (const s of tl.sent) {
+    let S = SC[SC.length - 1];
+    if (!S || S.key !== s.scene) { S = { key: s.scene, sents: [], words: [] }; SC.push(S) }
+    S.sents.push(s); S.words.push(...s.words)
+  }
+  SC.forEach((S, i) => { S.i = i; S.a = i ? S.sents[0].a - (EP.lead ?? .2) : 0; S.v = S.sents[0].a; S.e = S.sents[S.sents.length - 1].b });
+  SC.forEach((S, i) => { S.b = i < SC.length - 1 ? SC[i + 1].a : tl.dur; S.T = mkT(S) });
+  // субтитры: по 1–3 слова, ≤ 18 знаков, не через конец фразы
+  for (const s of tl.sent) {
+    let cur = [];
+    const flush = () => { if (cur.length) CH.push({ w: cur, a: cur[0].a, b: cur[cur.length - 1].b }); cur = [] };
+    for (const w of s.words) {
+      const len = cur.reduce((n, x) => n + x.d.length + 1, 0) + w.d.length;
+      if (cur.length >= 3 || (cur.length && len > 18)) flush();
+      cur.push(w);
+      if (/[.?!…:]$/.test(w.d)) flush();
+    }
+    flush();
+  }
+  CH.forEach((c, i) => { c.e = i < CH.length - 1 ? Math.min(CH[i + 1].a, c.b + .9) : c.b + .9 });
+  // v5: чистая картинка — без зерна и виньетки; размер и место субтитров — из EP.cap
+  document.getElementById('grain').style.display = EP.clean ? 'none' : '';
+  document.getElementById('vig').style.display = EP.clean ? 'none' : '';
+  if (EP.cap && EP.cap.size) capEl.style.fontSize = EP.cap.size + 'px';
+  if (EP.cap && EP.cap.top) capEl.style.top = EP.cap.top + 'px';
+  if (EP.cap && EP.cap.font) capEl.style.fontFamily = EP.cap.font;
+  if (EP.init) return EP.init(TL, SC);  // может вернуть промис (предзагрузка картинок) — capture.mjs его дождётся
+};
+
+function mkT(S) {
+  const W = S.words;
+  return {
+    a: S.a, b: S.b, v: S.v, e: S.e, S,
+    // время, когда прозвучало слово (n-е вхождение), иначе начало сцены + def
+    c(cue, n = 0, def = 0) {
+      const q = cueNorm(cue); let k = 0;
+      for (const w of W) if (cueNorm(w.d) === q || cueNorm(w.d).startsWith(q) && q.length > 3) { if (k++ === n) return w.a }
+      return S.v + def
+    },
+    s(k) { return (S.sents[k] || S.sents[S.sents.length - 1]).a },
+    se(k) { return (S.sents[k] || S.sents[S.sents.length - 1]).b },
+    w(i) { return (W[i] || W[W.length - 1]).a },
+  }
+}
+
+function sceneAt(t) { let i = 0; while (i < SC.length - 1 && t >= SC[i + 1].a) i++; return i }
+
+function drawScene(S, t) {
+  const f = EP.D[S.key];
+  if (!f) return bg(P.bg) + tx('[' + S.key + ']', 540, 800, { s: 60, c: '#f0f' });
+  return f(t, S, S.T);
+}
+
+window.render = function (t) {
+  UID = 0;
+  const i = sceneAt(t), S = SC[i];
+  let body;
+  const tr = i ? (EP.tr && EP.tr[SC[i - 1].key]) || EP.trDef || 'push' : 'cut';
+  const d = (EP.trDur && EP.trDur[SC[i - 1]?.key]) || TRD[tr] || .55;
+  const k = i && tr !== 'cut' ? clamp((t - S.a) / d) : 1;
+  if (k < 1) body = transition(tr, k, drawScene(SC[i - 1], t), drawScene(S, t), SC[i - 1], S);
+  else body = drawScene(S, t);
+  svg.innerHTML = '<defs>' + DEFS() + '</defs>' + body + (EP.over ? EP.over(t) : '');
+  captions(t);
+  const q = Math.floor(t * 12);
+  grainEl.style.transform = `translate(${(rnd(q) * 200) | 0}px,${(rnd(q + 99) * 200) | 0}px)`;
+};
+
+function captions(t) {
+  if (EP.noCap) { capEl.innerHTML = ''; return }
+  const c = CH.find(c => t >= c.a - .06 && t < c.e);
+  if (!c) { capEl.innerHTML = ''; return }
+  const k = clamp((t - c.a + .06) / .14);
+  capEl.style.transform = `translateY(${(1 - EZ.o(k)) * 14}px)`; capEl.style.opacity = k;
+  const hi = (EP.cap && EP.cap.hi) || '#FFD23F';
+  capEl.style.setProperty('--st', (EP.cap && EP.cap.st) || '#0B1020');
+  capEl.innerHTML = c.w.map(w => {
+    const on = t >= w.a - .03, now = on && (t < w.b + .05);
+    const col = w.c === 'y' ? '#FFD23F' : w.c === 'r' ? '#FF5A5A' : now ? hi : '#fff';
+    return `<span class="w${on ? '' : ' u'}" style="color:${col}">${esc(w.d)}</span>`
+  }).join(' ');
+}
+
+// шум «бумаги» один раз
+(function () {
+  const c = document.createElement('canvas'); c.width = c.height = 360;
+  const x = c.getContext('2d'), im = x.createImageData(360, 360);
+  for (let i = 0; i < im.data.length; i += 4) {
+    const r = Math.random();
+    if (r < .22) { const v = Math.random() < .5 ? 0 : 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 18 + Math.random() * 46 }
+  }
+  x.putImageData(im, 0, 0);
+  grainEl.style.backgroundImage = `url(${c.toDataURL()})`;
+})();
+</script>
+</body></html>
