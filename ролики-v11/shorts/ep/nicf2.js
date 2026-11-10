@@ -23,7 +23,7 @@
   function pack(x, y, s = 1, r = 0, o = {}) {
     const body = D_.rr(-150, -200, 300, 420, 14), c = o.c || K.paper; let q = '';
     for (let i = 0; i < 10; i++) { const p = pop(o.n ?? 20, i * 2, 2); if (p > 0) q += fill(D_.rr(-132 + i * 27, -200 - 130 * p, 23, 160, 5), K.paper) + fill(D_.rr(-132 + i * 27, -200 - 130 * p, 23, 44, 5), K.amber) }
-    q += fill(body, o.f || K.navy) + clip(body, ht(D_.rr(20, -200, 130, 420, 0), 'ink', .3)) + ln(body, 1, c, 6) + ln('M-150 -84H150', 1, c, 5);
+    q += fill(body, o.f || K.navy) + (o.chev ? clip(body, fill('M-160 -210H160V-10L0 -120L-160 -10Z', o.chev)) : '') + clip(body, ht(D_.rr(20, -200, 130, 420, 0), 'ink', o.chev ? .14 : .3)) + ln(body, 1, c, 6) + (o.chev ? '' : ln('M-150 -84H150', 1, c, 5));
     return g(q, at(x, y, s, r))
   }
   function laptop(x, y, s = 1, o = {}) {
@@ -48,7 +48,7 @@
     if (fo > 0) {
       const inner = dr >= .98 ? crystal(0, lerp(-70, 30, cl), .7, { c: K.navy }) : '';
       s += g(folder(540, fy, 1.3, -3, { inner, top: stamp('КОНФИДЕНЦИАЛЬНО', 20, 70, t, q.zasek - .05, { c: K.coral, s: 52, r: -10, ls: 3 }) }), about(540, 1000, 1 - .62 * go) + ` translate(${R(700 * go)} ${R(-240 * go)})`, 1);
-      s += g(big('1979', 540, 420, K.navy, 190), '', clamp(fo * 2) * (1 - go));
+      if (!NICF.noYear79) s += g(big('1979', 540, 420, K.navy, 190), '', clamp(fo * 2) * (1 - go));
     }
     s += stamper(566, 1130, t, q.zasek - .05);
     cue(a + .1, 'swish', .5); cue(q.nep - .2, 'thud', .6); cue(q.zasek - .05, 'stamp', 1); cue(q.arch - .4, 'whoosh', .5);
@@ -146,7 +146,7 @@
     const slice = `M0 0L${R(R0 * Math.cos(rad(a0)))} ${R(R0 * Math.sin(rad(a0)))}A${R0} ${R0} 0 0 1 ${R(R0 * Math.cos(rad(a1)))} ${R(R0 * Math.sin(rad(a1)))}Z`, mid = rad((a0 + a1) / 2);
     s += g(fill(D_.circ(0, 0, R0), K.paper) + ht('M-300 0A300 300 0 0 0 300 0Z', 'navy', .14) + g(stick(-60, 110, .42, -20, { f: K.navy, c: K.navy, cr: 3 }), ''), at(cx, lerp(2000, cy, k), 1));
     s += g(sh(slice, K.navy, K.paper, 6) + tx('35 %', 150 * Math.cos(mid), 150 * Math.sin(mid) + 22, { f: 'U', w: 800, s: 62, c: K.paper }), at(cx + 150 * sl * Math.cos(mid), lerp(2000, cy, k) + 150 * sl * Math.sin(mid), 1));
-    s += pack(880, lerp(-400, 420, E(t, q.proizv - .3, .6, 'o')), .78, 8, { n: 20, f: K.navy, c: K.paper });
+    s += pack(880, lerp(-400, 420, E(t, q.proizv - .3, .6, 'o')), .78, 8, NICF.chevron ? { n: 20, f: K.paper, c: K.navy, chev: '#D8232A' } : { n: 20, f: K.navy, c: K.paper });
     if (mn > 0) s += g(fill(D_.rr(90, 1150, 900, 130, 65), K.navy) + odo(lerp(0, 12.8e9, EZ.o(mn)), 540, 1242, { f: 'U', w: 800, s: 60, sep: ' ', c: K.amber, pre: '$ ' }), '', clamp(mn * 5));
     cue(a + .05, 'swish', .5); cue(q.kupil - .25, 'thud', .6); cue(q.pochti, 'coins', .7);
     return cam(s, t, a, { z: .04, d: 4 })
@@ -204,6 +204,7 @@
     return s
   }
   window.NICF2H = { back: handBack, front: handFront };
+  window.NICF2B = { bSafe, bArch, bStud, bJuul, bPod, bTeens, bDeal, bHome, bYou, setQ: q => { Q = q }, pack, stick, mango };
 
   window.NICF2 = function (T, Q0) {
     const c = (k, w, n = 0) => T[k].c(w, n);

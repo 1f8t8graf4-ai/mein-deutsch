@@ -56,7 +56,7 @@
   function frame(t) {
     let i = 0; while (i < B.length - 1 && t >= B[i + 1].a) i++;
     const b = B[i]; let out = b.draw(t);
-    if (i && b.tr && b.tr.kind) { const k = (t - b.a) / (b.tr.d || .6); if (k < 1) out = B[i - 1].draw(t) + reveal(b.tr, k, out) }
+    if (i && b.tr && b.tr.kind) { const k = (t - b.a) / (b.tr.d || .6); if (k < 1) { const cz = b.tr.kind === 'circ' && b.tr.zoom, x = b.tr.x ?? 540, y = b.tr.y ?? 800; out = g(B[i - 1].draw(t), cz ? about(x, y, 1 + b.tr.zoom * EZ.i(k)) : '') + reveal(b.tr, k, cz ? g(out, about(x, y, lerp(.86, 1, EZ.o(k)))) : out) } }
     return out
   }
   // камера: медленный наезд, чтобы кадр не стоял
@@ -169,7 +169,7 @@
     if (xr < 1 && window.NICF2H) s += g(NICF2H.front(), at(580, 920 + hk, 1.25, 0));
     if (xr > .05) { const pk = (t * .9) % 1; s += `<circle cx="540" cy="${R(vy + 35)}" r="${R(60 + pk * 190)}" fill="none" stroke="${K.amber}" stroke-width="5" opacity="${R(xr * (1 - pk) * .8)}"/>` }
     const to = 1 - xr;
-    if (to > 0) s += g(lab('ЧТО ВЫ ЗНАЕТЕ О', 540, 352, K.paper, 44, { ls: 12 }) + big('НИКОТИНЕ?', 540, 468, K.paper, 104), '', to);
+    if (to > 0) s += g(lab((NICF.title || ['ЧТО ВЫ ЗНАЕТЕ О', 'НИКОТИНЕ?', 104])[0], 540, 352, K.paper, 44, { ls: 12 }) + big((NICF.title || ['', 'НИКОТИНЕ?', 104])[1], 540, 468, K.paper, (NICF.title || ['', '', 104])[2]), '', to);
     if (yr > 0) s += g(odo(lerp(2026, 1973, EZ.io(yr)), 540, 470, { f: 'U', w: 800, s: 190, sep: '', c: K.paper }), `translate(0 ${R(-40 * (1 - EZ.o(P01(yr, 0, .25))))})`, clamp(yr * 5));
     cue(q.xray, 'shimmer', .5); cue(q.y50, 'tick', .5); cue(q.y50 + .3, 'tick', .5); cue(q.y50 + .6, 'tick', .5);
     return s
@@ -280,7 +280,7 @@
 
   D._ = frame;
   window.NICF = { SKIN, SKIN2, teen, face, stamper, ghost, K, B, beat, frame, cue, bgc, ln, sh, ht, clip, hexD, pop, lab, big, flow, smokeD, cam, vape, crystal, cig, memo, head, flask, BUST, PROF, MONO, AIR, zig, APPLE,
-    beats: { bHook, bTob, bMemo, bHarsh, bLab, bSmooth, bTubes }, setQ: q => { Q = q }, getQ: () => Q };
+    beats: { bHook, bTob, bMemo, bHarsh, bLab, bSmooth, bTubes }, setQ: q => { Q = q }, getQ: () => Q, setHud: k => { HUDK = k }, hud: t => hud(t), defs };
   window.EP = {
     P, D, clean: true, lead: .1, tr: {}, trDef: 'cut',
     cap: { size: 54, top: 1370, font: 'U', hi: K.amber, st: K.ink },
