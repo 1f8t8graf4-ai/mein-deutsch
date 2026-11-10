@@ -132,9 +132,9 @@
       const c = i % 4, r = Math.floor(i / 4), x = 150 + c * 260 + (r % 2 ? 40 : -40), y = 640 + r * 190 + dn, p = pop(t, a + .1 + i * .035, .4); if (p <= 0) continue;
       const hi = HOT.indexOf(i), hot = hi >= 0 ? clamp(hk * 4 - hi * .8) : 0;
       s += g(fill(BUST, hot > .5 ? K.coral : K.paper2) + clip(BUST, ht('M0 -110H130V180H0Z', hot > .5 ? 'ink' : 'navy', .3)) + fill(D_.circ(0, -30, 62), SKIN) + face([K.ink, K.navy3, K.coral2, K.navy][i % 4]), at(x, y + 60 * (1 - p), 1.05 * (1 + .12 * Math.sin(Math.PI * clamp(hot)))));
-      if (hot > .5) { s += ln(smokeD(x + 60, y - 30, 120, t + i, 14, 30, 10), clamp(hot * 2 - 1), K.paper, 5); if (thr > 0) th += ln(`M540 520C${540 + (x - 540) * .3} ${700 + dn} ${x} ${y - 260} ${x} ${y - 96}`, clamp(thr * 1.6 - hi * .15), K.coral, 6) }
+      if (hot > .5) { s += ln(smokeD(x + 60, y - 30, 120, t + i, 14, 30, 10), clamp(hot * 2 - 1), K.paper, 5); if (thr > 0) th += ln(`M540 620C${540 + (x - 540) * .3} ${700 + dn} ${x} ${y - 260} ${x} ${y - 96}`, clamp(thr * 1.6 - hi * .15), K.coral, 6) }
     }
-    if (mk > 0) s += th + memo(540, lerp(-500, 400, mk), .62, lerp(-14, 4, mk), { ring: rk, st: true }, t);
+    if (mk > 0) s += th + memo(540, lerp(-500, 500, mk), .62, lerp(-14, 4, mk), { ring: rk, st: true }, t);
     HOT.forEach((_, i) => cue(q.chetv - .1 + i * .2, 'puff', .45, i % 2 ? .4 : -.4)); cue(q.rynok - .15, 'swish', .6); cue(q.zap2 - .6, 'whip', .5);
     return s
   }
@@ -183,15 +183,15 @@
     const vx = lerp(415, 540, one), vy = lerp(1120, 900, one), vs = lerp(.62, 1.3, one), vr = lerp(0, -9, fin);
     let w = '';
     if (up > 0 || st > 0) {
-      w += g(big('1973', 290, -380, K.coral, 130) + memo(770, -330, .62, 6, { ring: 1, st: true }, t), '', clamp(up * 3 + .001));
+      w += g(big('1973', 290, -290, K.coral, 130) + memo(770, -200, .62, 6, { ring: 1, st: true }, t), '', clamp(up * 3 + .001));
       const k3 = EZ.io(st), sway = wob(t, .35, 10);
-      [[-90, 330, 680], [10, 150, 770], [110, 420, 830], [-270, 100, 620]].forEach(([dx, hy, x0], i) => { w += ln(`M${x0} -120C${x0 + sway} 300 ${vx + dx - sway} 400 ${vx + dx} ${vy + hy}`, clamp(k3 * 1.3 - i * .12), K.coral, 6, { op: 1 - fin }) });
+      [[-90, 330, 680], [10, 150, 770], [110, 420, 830]].forEach(([dx, hy, x0], i) => { w += ln(`M${x0} -40C${x0 + sway} 300 ${vx + dx - sway} 400 ${vx + dx} ${vy + hy}`, clamp(k3 * 1.3 - i * .12), K.coral, 6) });
     }
     // рука + одноразка (i = 5 — «наша»)
     const p5 = pop(t, a + .3, .4), hy = 1500 * (1 - hd);
     let hv = '';
     const lk = [1 - up - fin, -.7 - .3 * up + .7 * fin];
-    if (hd > 0) hv += teen(270, 1210 + hy, 1.7, { look: lk, m: st > .5 && fin < .5 ? -1 : 0 }) + g(NICF2H.back(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
+    if (hd > 0) hv += g(NICF2H.back(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
     hv += vape(vx, vy, vs * (one > 0 ? 1 : p5), vr, { x: 1 - one, f: K.amber, in: K.navy3 });
     if (hd > 0) hv += g(NICF2H.front(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
     const mgp = pop(t, q.mango2 - .3, .5) * (1 - E(t, q.no - .2, .4));

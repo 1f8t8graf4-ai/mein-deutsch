@@ -37,7 +37,7 @@ def sent(tl, scene, n=0):
 
 
 def anchors(tl):
-    return {'claim': sent(tl, 'claim')['a'], 'tob': sent(tl, 'claim', 1)['a'], 'stamp': word(tl, 'safe', 'засекретили'),
+    return {'claim': max(.3, sent(tl, 'hook')['a']), 'tob': sent(tl, 'hook', 1)['a'], 'stamp': word(tl, 'safe', 'засекретили'),
             'open': word(tl, 'archive', 'открыть'), 'home': word(tl, 'deal', 'домой'), 'you': sent(tl, 'you')['a'],
             's73': word(tl, 'you', 'семьдесят'), 'q': sent(tl, 'you', 3)['a'], 'qe': sent(tl, 'you', 3)['b'], 'dur': tl['dur']}
 

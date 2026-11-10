@@ -158,39 +158,31 @@
   // ================= БИТЫ =================
   // 1. Завязка: одноразка → миллиард точек → рентген: внутри соль → год катится назад
   function bHook(t) {
-    const q = Q, zo = E(t, q.bil - .12, .7) - E(t, q.claim - .2, .7), xr = E(t, q.nach - .15, .7), yr = P01(t, q.y50 - .1, 1.5);
-    let s = bgc(K.navy);
-    s += fill(D_.circ(540, 860, lerp(470, 120, EZ.io(zo)) * (1 + .5 * xr)), K.navy2);
-    if (zo > 0.02) { // миллиард: точки-люди расходятся кольцами
-      let dd = ''; const N = 460, kk = clamp(zo * 1.15);
-      for (let i = 6; i < N; i++) { const r = 44 * Math.sqrt(i), a = i * 2.39996 + t * .02, u = i / N; if (u > kk) break; const pk = clamp((kk - u) * 14); dd += `<circle cx="${R(540 + Math.cos(a) * r)}" cy="${R(860 + Math.sin(a) * r)}" r="${R(8.5 * pk)}" fill="${i % 7 === 0 ? K.coral : K.paper}"/>` }
-      s += g(dd, '', clamp(zo * 3));
-    }
-    const sc = lerp(lerp(1.3, .15, EZ.io(zo)), 1.75, xr), rot = lerp(-9, 0, Math.max(zo, xr)) + wob(t, .2, 1.2) * (1 - xr), vy = lerp(900, 860, Math.max(zo, xr)) + 130 * EZ.io(yr);
-    const a = (rot) * Math.PI / 180, tipx = 540 + 252 * sc * Math.sin(a), tipy = vy - 252 * sc * Math.cos(a);
-    if (zo < .5 && xr < .9) s += g(ln(smokeD(tipx, tipy, 700 * (1 - zo), t, 34, 210), E(t, .25, 1.1), K.coral, 7), '', (1 - zo * 2) * (1 - xr));
-    const hk = t < .7 && window.NICF2H ? 1500 * EZ.i(P01(t, .08, .6)) : -1;
-    if (hk >= 0) s += teen(270, 1210 + hk, 1.7, { look: [0, 0] }) + g(NICF2H.back(), at(580, 920 + hk, 1.25, 0));
-    s += vape(540, vy, sc, rot, { x: xr });
-    if (hk >= 0) s += g(NICF2H.front(), at(580, 920 + hk, 1.25, 0));
+    const q = Q, xr = E(t, q.xray, .6), yr = P01(t, q.y50 - .15, 1.1), vx = 540;
+    let s = bgc(K.navy) + fill(D_.circ(540, 860, 470 * (1 + .5 * xr)), K.navy2);
+    const sc = lerp(1.3, 1.75, xr), rot = lerp(-9, 0, xr), vy = lerp(900, 860, xr) + 130 * EZ.io(yr), hk = 1500 * EZ.i(xr);
+    // нити сверху — с первого кадра: кто-то держит (те же, что в финале)
+    const so = clamp(t / .25) * (1 - xr), sway = wob(t, .35, 10);
+    if (so > 0) [[-90, 330, 680], [10, 150, 770], [110, 420, 830]].forEach(([dx, hy, x0]) => { s += ln(`M${x0} -120C${x0 + sway} 300 ${vx + dx - sway} 400 ${vx + dx} ${900 + hy + hk}`, 1, K.coral, 6, { op: so }) });
+    if (xr < 1 && window.NICF2H) s += g(NICF2H.back(), at(580, 920 + hk, 1.25, 0));
+    s += vape(vx, vy, sc, rot, { x: xr });
+    if (xr < 1 && window.NICF2H) s += g(NICF2H.front(), at(580, 920 + hk, 1.25, 0));
     if (xr > .05) { const pk = (t * .9) % 1; s += `<circle cx="540" cy="${R(vy + 35)}" r="${R(60 + pk * 190)}" fill="none" stroke="${K.amber}" stroke-width="5" opacity="${R(xr * (1 - pk) * .8)}"/>` }
-    const to = 1 - E(t, q.bil - .25, .35);
-    if (to > 0) s += g(lab('ЧТО ВЫ ЗНАЕТЕ О', 540, 300, K.paper, 46, { ls: 12 }) + big('НИКОТИНЕ?', 540, 420, K.paper, 106), `translate(0 ${R(-30 * (1 - EZ.o(P01(t, 0, .5))))})`, to * clamp(t / .3));
-    if (zo > .3 && xr <= 0) { const k = P01(t, q.mlrd - .5, 1.5); s += g(fill(D_.rr(110, 236, 860, 150, 75), K.navy) + odo(lerp(0, 1.2e9, EZ.o(k)), 540, 338, { f: 'U', w: 800, s: 66, sep: ' ', c: K.paper }), '', clamp((zo - .3) * 4)) }
-    if (yr > 0) { s += g(odo(lerp(2026, 1973, EZ.io(yr)), 540, 420, { f: 'U', w: 800, s: 190, sep: '', c: K.paper }), `translate(0 ${R(-40 * (1 - EZ.o(P01(yr, 0, .25))))})`, clamp(yr * 5)) }
-    cue(q.bil - .1, 'whoosh', .5); cue(q.nach - .1, 'shimmer', .5); cue(q.y50, 'tick', .5); cue(q.y50 + .35, 'tick', .5); cue(q.y50 + .7, 'tick', .5);
+    const to = 1 - xr;
+    if (to > 0) s += g(lab('ЧТО ВЫ ЗНАЕТЕ О', 540, 352, K.paper, 44, { ls: 12 }) + big('НИКОТИНЕ?', 540, 468, K.paper, 104), '', to);
+    if (yr > 0) s += g(odo(lerp(2026, 1973, EZ.io(yr)), 540, 470, { f: 'U', w: 800, s: 190, sep: '', c: K.paper }), `translate(0 ${R(-40 * (1 - EZ.o(P01(yr, 0, .25))))})`, clamp(yr * 5));
+    cue(q.xray, 'shimmer', .5); cue(q.y50, 'tick', .5); cue(q.y50 + .3, 'tick', .5); cue(q.y50 + .6, 'tick', .5);
     return s
   }
   // 2. «В табачной компании. Для молодых.» — коралл, сигарета больше кадра, дым тянется к трём силуэтам
   function bTob(t) {
-    const q = Q, a = q.tob, k = E(t, a, .8, 'o'), m = E(t, q.mol - .15, .7);
+    const q = Q, a = q.tob, k = E(t, a, .8, 'o'), m = 0;
     let s = bgc(K.coral) + ghost('bricks', K.coral2, .7) + fill(D_.circ(760, 760, 430), K.coral2) + ht(D_.circ(760, 760, 430), 'ink', .16);
-    s += big('1973', 540, 420, K.navy, 190);
+    s += big('1973', 540, 470, K.navy, 190);
     const cx = lerp(1500, 640, k), cy = 800 - 60 * m;
     s += ln(smokeD(cx - 318 * 1.7 * Math.cos(-.14) - 0, cy + 318 * 1.7 * Math.sin(.14) - 30, 520, t, 40, -120 - 260 * m), E(t, a + .4, 1.2), K.paper, 8);
     s += cig(cx, cy, 1.7, -8, { ember: K.navy });
-    for (let i = 0; i < 3; i++) { const p = pop(t, q.mol - .1 + i * .13, .5); if (p > 0) s += g(fill(BUST, K.navy) + clip(BUST, ht('M-130 -110H0V180H-130Z', 'navy3', .5)) + fill(D_.circ(0, -30, 62), SKIN) + face(), at(190 + i * 230, 1330 - 190 * p + i * 10, 1.3 - i * .1)) }
-    cue(a, 'wave', .7); cue(q.mol - .1, 'thud', .45);
+        cue(a, 'wave', .7);
     return cam(s, t, a, { z: .06, d: 3 })
   }
   // 3. Записка: лист въезжает, машинка печатает цитату, обводка — та самая красная линия
@@ -266,11 +258,24 @@
     s += g(odo(Math.min(30, cnt), 540, 400, { f: 'U', w: 800, s: 170, sep: '', c: K.paper }), '', 1 - one);
     if (ap > 0) {
       const hx = 165 + (HOT % 6) * 150, hy = 560 + Math.floor(HOT / 6) * 172;
-      s += ln(`M${hx} ${hy - 90}C${hx + 30} ${hy - 200} ${hx - 150} ${hy - 300} 560 480`, E(t, q.yabl - .45, .5), K.mint, 6, { da: '4 16' });
-      s += g(fill(APPLE, K.mint) + clip(APPLE, ht('M0 -120H140V140H0Z', 'ink', .22)) + ln('M0 -70C4 -110 20 -130 40 -140', 1, K.paper, 7) + fill(D_.leaf(10, -112, 80, 26, -30), K.mint2), at(540, 370, 1.15 * ap, wob(t, .5, 3)));
+      s += ln(`M${hx} ${hy - 90}C${hx + 30} ${hy - 200} ${hx - 150} ${hy - 300} 560 560`, E(t, q.yabl - .45, .5), K.mint, 6, { da: '4 16' });
+      s += g(fill(APPLE, K.mint) + clip(APPLE, ht('M0 -120H140V140H0Z', 'ink', .22)) + ln('M0 -70C4 -110 20 -130 40 -140', 1, K.paper, 7) + fill(D_.leaf(10, -112, 80, 26, -30), K.mint2), at(540, 450, 1.15 * ap, wob(t, .5, 3)));
     }
     cue(a + .2, 'scuttle', .4); cue(q.odin - .05, 'ding', .5); cue(q.yabl - .35, 'chomp', .5);
     return cam(s, t, a, { z: .04, d: 4 })
+  }
+
+  // Шкала времени сверху — держит зрителя, как счётчик затяжек у klin_situation: в завязке отматывается с «сейчас» в 1973 и идёт обратно к «сейчас».
+  const YEARS = ['1973', '1979', '1998', '2005', '2015', '2019', 'СЕЙЧАС'];
+  let HUDK = null;
+  function hud(t) {
+    if (!HUDK) return '';
+    let p = HUDK[0][1];
+    for (let i = 0; i < HUDK.length - 1; i++) { const [a, pa] = HUDK[i], [b, pb] = HUDK[i + 1]; if (t >= a) p = t >= b ? pb : lerp(pa, pb, EZ.io((t - a) / (b - a))) }
+    const x0 = 120, x1 = 960, y = 222, x = lerp(x0, x1, p), lb = YEARS[Math.round(p * 6)], w = tw(lb, { f: 'O', w: 700, s: 32, ls: 2 }) + 40, cx = clamp(x, x0 + w / 2 - 30, x1 - w / 2 + 30);
+    let s = fill(D_.rr(60, 176, 960, 92, 46), K.ink, .85) + ln(`M${x0} ${y}H${x1}`, 1, K.paper, 4, { op: .3 }) + ln(`M${x0} ${y}H${R(x)}`, 1, K.coral, 6);
+    for (let i = 0; i < 7; i++) s += `<circle cx="${R(lerp(x0, x1, i / 6))}" cy="${y}" r="7" fill="${i / 6 <= p + .001 ? K.coral : K.navy3}"/>`;
+    return s + fill(D_.rr(cx - w / 2, y - 27, w, 54, 27), K.coral) + tx(lb, cx, y + 11, { f: 'O', w: 700, s: 32, c: K.paper, ls: 2 })
   }
 
   D._ = frame;
@@ -278,26 +283,31 @@
     beats: { bHook, bTob, bMemo, bHarsh, bLab, bSmooth, bTubes }, setQ: q => { Q = q }, getQ: () => Q };
   window.EP = {
     P, D, clean: true, lead: .1, tr: {}, trDef: 'cut',
-    cap: { size: 62, top: 1380, hi: K.amber, st: K.ink },
+    cap: { size: 54, top: 1370, font: 'U', hi: K.amber, st: K.ink },
+    over: t => hud(t),
     defs,
     init(tl, SC) {
       const T = {}; SC.forEach(S => { T[S.key] = S.T; D[S.key] = frame });
       const c = (k, w, n = 0) => T[k].c(w, n);
       Q = {
-        bil: T.hook.s(1), mlrd: c('hook', 'миллиарда'), claim: T.claim.s(0), nach: c('claim', 'начинку'), y50: c('claim', 'пятьдесят'), tob: T.claim.s(1), mol: c('claim', 'молодых'),
-        memo: T.memo.s(0), rey: c('memo', 'Рейнольдс'), sekr: c('memo', 'секретную'), quote: T.memo.s(1), quoteE: T.memo.se(1), molR: c('memo', 'молодёжного'),
+        xray: T.hook.a + .75, y50: c('hook', 'пятьдесят'), tob: T.hook.s(1), memo: c('hook', 'секретной') - .05, sekr: c('hook', 'записке') + .2,
+        quote: c('memo', 'Чтобы'), quoteE: T.memo.se(0), molR: c('memo', 'молодёжного'),
         harsh: T.harsh.s(0), deret: c('harsh', 'дерёт'),
-        lab: T.lab.s(0), nik: c('lab', 'никотин'), kis: c('lab', 'кислотой'), salt: T.lab.s(1), smooth: c('lab', 'не', 0), doza: c('lab', 'дозе'), tubes: T.lab.s(2), t30: c('lab', 'тридцать'), odin: c('lab', 'Один'), yabl: c('lab', 'яблоком'),
+        lab: T.lab.s(0), nik: c('lab', 'никотин'), kis: c('lab', 'кислотой'), salt: T.lab.s(1), smooth: c('lab', 'не', 0), doza: c('lab', 'дозе'), tubes: T.lab.s(2), yabl: c('lab', 'яблоком'),
       };
+      Q.rey = Q.memo + .3; Q.t30 = Q.tubes + .6; Q.odin = c('lab', 'образец') + .15;
+      const ce = document.getElementById('cap'); ce.style.textTransform = 'uppercase';  // субтитры как у TikTok-примеров: крупно, капсом
       B.length = 0;
       beat(0, bHook);
-      beat(Q.tob - .12, bTob, { kind: 'up', band: K.paper, d: .65 });
-      beat(Q.memo - .1, bMemo, { kind: 'diag', band: K.navy3, d: .6 });
+      beat(Q.tob - .12, bTob, { kind: 'up', band: K.paper, d: .5 });
+      beat(Q.memo, bMemo, { kind: 'diag', band: K.navy3, d: .45 });
       beat(Q.harsh - .1, bHarsh, { kind: 'up', band: K.coral, d: .6 });
       beat(Q.lab - .1, bLab, { kind: 'diag', band: K.coral, d: .6 });
       beat(Q.smooth - .15, bSmooth, { kind: 'circ', band: K.amber, d: .6, x: 540, y: 800 });
       beat(Q.tubes - .1, bTubes, { kind: 'up', band: K.amber, d: .6 });
       if (window.NICF2) window.NICF2(T, Q);
+      const st = [[Q.y50 + 1.0, 0], [Q.s79 + .3, 1], [Q.archA + 1.6, 2], [Q.stud + .5, 3], [Q.juul + .6, 4], [Q.chetv - .6, 5], [Q.you + .5, 6]];
+      HUDK = [[0, 1], [Q.y50 - .1, 1]]; st.forEach(([tt, i], j) => { if (j) HUDK.push([tt - .6, (i - 1) / 6]); HUDK.push([tt, i / 6]) });
     }
   };
 })();
