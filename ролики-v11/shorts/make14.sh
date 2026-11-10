@@ -4,13 +4,15 @@
 set -e
 cd "$(dirname "$0")"; export NODE_PATH=${NODE_PATH:-/opt/node-tools/node_modules}
 for EP in "$@"; do
-  python3 el13.py demon $EP
-  node capture.mjs $EP cues 20
-  MUSIC=music/v14-raw.mp3 python3 audio.py $EP
-  node capture.mjs $EP video 30 4
-  FMT=9x16 node capture.mjs $EP video 30 4
+  if [ -z "$MUXONLY" ]; then
+    python3 el13.py demon $EP
+    node capture.mjs $EP cues 20
+    MUSIC=music/v14-raw.mp3 python3 audio.py $EP
+    node capture.mjs $EP video 30 4
+    FMT=9x16 node capture.mjs $EP video 30 4
+  fi
   for F in 16x9 9x16; do
-    V=out/$EP/video$([ $F = 9x16 ] && echo -9x16).mp4
+    if [ $F = 9x16 ]; then V=out/$EP/video-9x16.mp4; else V=out/$EP/video.mp4; fi
     ffmpeg -y -v error -i $V -i out/$EP/mix.wav -map 0:v -map 1:a -af volume=-0.6dB -c:v libx264 -preset medium -crf 21 -maxrate 8M -bufsize 16M -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -movflags +faststart out/$EP/${EP%-ru}_${F}_clean_master.mp4
   done
   echo "$EP ГОТОВО"
