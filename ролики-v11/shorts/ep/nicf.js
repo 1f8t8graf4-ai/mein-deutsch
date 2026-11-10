@@ -109,7 +109,7 @@
   function head(x, y, s, o = {}, t = 0) {
     const f = o.f || K.coral, ch = o.ch || K.navy;
     let q = fill(SHOULD, o.f2 || f) + clip(SHOULD, ht('M-380 760V300H330V760Z', o.dot || 'ink', .22)) + fill(PROF, f) + clip(PROF, ht('M-260 -260H-20L-90 330H-260Z', o.dot || 'ink', .2));
-    q += ln(AIR, 1, ch, 40) + (o.air || '');
+    q += ln(AIR, 1, ch, 40) + (o.air || '') + fill('M-196 -40C-200 -190 -90 -262 30 -250C120 -242 176 -190 190 -120C120 -170 40 -176 -30 -150C-80 -130 -96 -60 -110 40C-150 30 -190 0 -196 -40Z', o.hair || K.ink) + (o.eye ? fill(D_.ell(118, -52, 13, o.eye), o.hair || K.ink) + ln('M92 -86L146 -80', 1, o.hair || K.ink, 7) : '');
     return g(q, at(x, y, s, o.r || 0))
   }
   function zig(d, amp, n = 34) { const p = pts(d, n + 1); let s = ''; for (let i = 0; i < p.length; i++) { const a = p[Math.min(i + 1, p.length - 1)], b = p[Math.max(i - 1, 0)], dx = a[0] - b[0], dy = a[1] - b[1], l = Math.hypot(dx, dy) || 1, o = i % 2 ? amp : -amp; s += (i ? 'L' : 'M') + R(p[i][0] - dy / l * o) + ' ' + R(p[i][1] + dx / l * o) } return s }
@@ -121,6 +121,38 @@
     if (o.lv > 0) q += clip(body, fill(D_.rr(-r, r - 2 * r * o.lv, 2 * r, 2 * r, 0), o.liq || K.amber) + ht(D_.rr(0, -r, r, 2 * r, 0), 'ink', .22));
     q += ln(d, o.k ?? 1, o.c || K.paper, 6) + ln(`M${-r * .4} ${-r * 1.9}H${r * .4}`, o.k ?? 1, o.c || K.paper, 6);
     return g(q, at(x, y, 1, o.r || 0))
+  }
+
+  // ---------- по всем 13 оригиналам (10.11): герой с лицом, руки «в костюме», место действия контуром на фоне ----------
+  const SKIN = '#F4C7A1', SKIN2 = '#DDA57C';
+  // подросток по плечи, лицом к зрителю: o.h — худи, o.look — зрачки [-1…1, -1…1], o.m — рот: 0 ровно, 1 улыбка, -1 «о»
+  function teen(x, y, s = 1, o = {}) {
+    const body = 'M-200 330C-200 205 -135 152 -62 138H62C135 152 200 205 200 330Z', hd = D_.rr(-92, -124, 184, 214, 86), lk = o.look || [0, 0];
+    let q = fill(body, o.h || K.coral) + clip(body, ht('M0 100H210V340H0Z', 'ink', .22)) + ln('M-26 150V214M26 150V214', 1, K.paper, 5, { op: .8 });
+    q += fill(D_.rr(-36, 56, 72, 100, 20), SKIN2) + fill(D_.circ(-94, 0, 20), SKIN) + fill(D_.circ(94, 0, 20), SKIN) + fill(hd, SKIN) + clip(hd, ht('M20 -130H100V100H20Z', 'coral', .16));
+    q += fill('M-100 -30C-112 -150 -34 -178 28 -168C102 -158 114 -92 100 -24C84 -66 44 -98 -18 -94C-58 -90 -84 -66 -100 -30Z', o.hair || K.ink);
+    q += `<circle cx="${R(-36 + lk[0] * 5)}" cy="${R(-6 + lk[1] * 4)}" r="9" fill="${K.ink}"/><circle cx="${R(36 + lk[0] * 5)}" cy="${R(-6 + lk[1] * 4)}" r="9" fill="${K.ink}"/>` + ln('M-52 -34L-22 -30M22 -30L52 -34', 1, K.ink, 5) + ln('M2 4L-8 30L6 32', 1, SKIN2, 5);
+    q += o.m === -1 ? fill(D_.ell(0, 60, 11, 13), K.ink) : ln(o.m === 1 ? 'M-20 54C-8 66 8 66 20 54' : 'M-18 58H18', 1, K.ink, 5);
+    return g(q, at(x, y, s, o.r || 0))
+  }
+  // лицо для маленьких силуэтов BUST: волосы и глаза
+  const face = (hair = K.ink) => fill('M-75 -42C-72 -110 72 -110 75 -42C52 -76 -52 -76 -75 -42Z', hair) + `<circle cx="-24" cy="-28" r="6" fill="${K.ink}"/><circle cx="24" cy="-28" r="6" fill="${K.ink}"/>`;
+  // рука в костюме ставит штамп: опускается к t0, уходит вверх. (x, y) — куда бьёт
+  function stamper(x, y, t, t0) {
+    const dn = EZ.i(P01(t, t0 - .34, .34)), up = EZ.io(P01(t, t0 + .16, .45)); if (dn <= 0 || up >= 1) return '';
+    const q = sh('M40 -1100L300 -1100L196 -168L16 -190Z', K.ink, K.paper, 6) + sh('M12 -252L200 -230L188 -158L6 -180Z', K.paper, K.navy, 5) + sh(D_.rr(-36, -120, 150, 80, 20), K.coral2, K.navy, 6) +
+      sh(D_.rr(-74, -204, 236, 150, 62), SKIN, K.navy, 6) + ln('M-30 -150H110M-30 -110H110', 1, K.navy, 5, { op: .5 }) + sh(D_.rr(-96, -46, 270, 46, 10), K.navy, K.paper, 5);
+    return g(q, at(x, y - 1000 * (1 - dn) - 1000 * up, 1, 0))
+  }
+  // место действия тонким контуром на фоне (как кирпичи и облака у Starbucks и Хованского)
+  function ghost(kind, c = K.navy3, op = .55) {
+    let d = '';
+    if (kind === 'bricks') for (let i = 0; i < 16; i++) { const x = rnd(i) * 1000, y = 180 + rnd(i + 40) * 1500, w = 70 + rnd(i + 9) * 50; d += `M${R(x)} ${R(y)}h${R(w)}v34h${R(-w)}Z` + (i % 2 ? `M${R(x + w + 12)} ${R(y)}h${R(w * .6)}v34h${R(-w * .6)}Z` : '') }
+    if (kind === 'blinds') { for (let i = 0; i < 10; i++) d += `M70 ${210 + i * 44}H420`; d += 'M50 180H440V660H50ZM650 1260h380M700 1260v-150h280v150M840 1110v-60' }
+    if (kind === 'lockers') for (let i = 0; i < 6; i++) d += `M${40 + i * 200} 400V1700M${90 + i * 200} 470h80M${90 + i * 200} 500h80M${90 + i * 200} 530h80M${196 + i * 200} 900v60`;
+    if (kind === 'tiles') { for (let i = 1; i < 6; i++) d += `M${i * 180} 0V1920`; for (let i = 1; i < 11; i++) d += `M0 ${i * 180}H1080` }
+    if (kind === 'shelves') for (let i = 0; i < 2; i++) d += `M60 ${762 + i * 520}H1020M60 ${780 + i * 520}H1020M90 ${780 + i * 520}v40M990 ${780 + i * 520}v40`;
+    return `<path d="${d}" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" opacity="${op}"/>`
   }
 
   // ================= БИТЫ =================
@@ -138,7 +170,7 @@
     const a = (rot) * Math.PI / 180, tipx = 540 + 252 * sc * Math.sin(a), tipy = vy - 252 * sc * Math.cos(a);
     if (zo < .5 && xr < .9) s += g(ln(smokeD(tipx, tipy, 700 * (1 - zo), t, 34, 210), E(t, .25, 1.1), K.coral, 7), '', (1 - zo * 2) * (1 - xr));
     const hk = t < .7 && window.NICF2H ? 1500 * EZ.i(P01(t, .08, .6)) : -1;
-    if (hk >= 0) s += g(NICF2H.back(), at(580, 920 + hk, 1.25, 0));
+    if (hk >= 0) s += teen(270, 1210 + hk, 1.7, { look: [0, 0] }) + g(NICF2H.back(), at(580, 920 + hk, 1.25, 0));
     s += vape(540, vy, sc, rot, { x: xr });
     if (hk >= 0) s += g(NICF2H.front(), at(580, 920 + hk, 1.25, 0));
     if (xr > .05) { const pk = (t * .9) % 1; s += `<circle cx="540" cy="${R(vy + 35)}" r="${R(60 + pk * 190)}" fill="none" stroke="${K.amber}" stroke-width="5" opacity="${R(xr * (1 - pk) * .8)}"/>` }
@@ -152,12 +184,12 @@
   // 2. «В табачной компании. Для молодых.» — коралл, сигарета больше кадра, дым тянется к трём силуэтам
   function bTob(t) {
     const q = Q, a = q.tob, k = E(t, a, .8, 'o'), m = E(t, q.mol - .15, .7);
-    let s = bgc(K.coral) + fill(D_.circ(760, 760, 430), K.coral2) + ht(D_.circ(760, 760, 430), 'ink', .16);
+    let s = bgc(K.coral) + ghost('bricks', K.coral2, .7) + fill(D_.circ(760, 760, 430), K.coral2) + ht(D_.circ(760, 760, 430), 'ink', .16);
     s += big('1973', 540, 420, K.navy, 190);
     const cx = lerp(1500, 640, k), cy = 800 - 60 * m;
     s += ln(smokeD(cx - 318 * 1.7 * Math.cos(-.14) - 0, cy + 318 * 1.7 * Math.sin(.14) - 30, 520, t, 40, -120 - 260 * m), E(t, a + .4, 1.2), K.paper, 8);
     s += cig(cx, cy, 1.7, -8, { ember: K.navy });
-    for (let i = 0; i < 3; i++) { const p = pop(t, q.mol - .1 + i * .13, .5); if (p > 0) s += g(fill(BUST, K.navy) + clip(BUST, ht('M-130 -110H0V180H-130Z', 'navy3', .5)), at(190 + i * 230, 1330 - 190 * p + i * 10, 1.3 - i * .1)) }
+    for (let i = 0; i < 3; i++) { const p = pop(t, q.mol - .1 + i * .13, .5); if (p > 0) s += g(fill(BUST, K.navy) + clip(BUST, ht('M-130 -110H0V180H-130Z', 'navy3', .5)) + fill(D_.circ(0, -30, 62), SKIN) + face(), at(190 + i * 230, 1330 - 190 * p + i * 10, 1.3 - i * .1)) }
     cue(a, 'wave', .7); cue(q.mol - .1, 'thud', .45);
     return cam(s, t, a, { z: .06, d: 3 })
   }
@@ -165,9 +197,10 @@
   function bMemo(t) {
     const q = Q, a = q.memo, k = E(t, q.rey - .25, .7, 'o'), n = MEMO_N * P01(t, q.quote + .05, Math.max(.8, q.quoteE - q.quote - .9)), rk = E(t, q.molR - .1, .7), zi = E(t, q.molR - .2, 1.2);
     let s = bgc(K.navy) + fill(D_.poly([[-200, 1500], [1280, 900], [1280, 2200], [-200, 2200]]), K.navy2) + ht(D_.poly([[-200, 1500], [1280, 900], [1280, 1100], [-200, 1700]]), 'ink', .3);
-    s += g(big('1973', 540, 420, K.coral, 190), '', 1 - zi);
+    s += g(ghost('blinds'), '', 1 - zi) + g(big('1973', 540, 420, K.coral, 190), '', 1 - zi);
     const mm = memo(lerp(1500, 540, k), lerp(700, 880, k), 1.22, lerp(16, -3, k), { n: t < q.quote ? 0 : n, ring: rk, st: q.sekr }, t);
     s += g(mm, about(540, 1010, 1 + .32 * zi) + ` translate(0 ${R(-150 * zi)})`);
+    s += stamper(700, 610, t, q.sekr);
     cue(q.rey - .25, 'swish', .6); cue(q.sekr, 'stamp', .9);
     for (let i = 0; i < 9; i++) cue(q.quote + .1 + i * (q.quoteE - q.quote - 1) / 9, 'tick', .3, (i % 3 - 1) * .3);
     cue(q.molR - .1, 'quill', .6);
@@ -176,11 +209,11 @@
   // 4. «Дым дерёт горло»: профиль, дым входит в рот и царапает
   function bHarsh(t) {
     const q = Q, a = q.harsh, k1 = E(t, a + .1, .8, 'io'), k2 = E(t, q.deret - .25, .6), shk = Math.sin(t * 46) * 7 * P01(t, q.deret, .12) * (1 - P01(t, q.deret + .5, .4));
-    let s = bgc(K.navy) + fill(D_.circ(380, 900, 620), K.navy2);
+    let s = bgc(K.navy) + fill(D_.circ(380, 900, 620), K.navy2) + ghost('bricks');
     const hx = 400 + shk, hy = 760, sc = 1.42;
     const inD = 'M1200 160C900 60 760 330 620 240C480 150 330 128 214 133';
     const air = ln(zig(AIR, 15), k2, K.coral, 9) + (k2 > .2 ? [0, 1, 2, 3].map(i => { const p = pts(AIR, 30)[8 + i * 5], kk = pop(t, q.deret + i * .07, .3); return kk > 0 ? ln(D_.star(p[0], p[1], 34 * kk, 12 * kk, 6, i * 17), 1, K.coral, 5) : '' }).join('') : '');
-    s += head(hx, hy, sc, { air }, t);
+    s += head(hx, hy, sc, { air, eye: k2 > .5 ? 4 : 14 }, t);
     s += g(ln(inD, k1, K.paper, 8), at(hx, hy, sc));
     if (k2 > .3) for (let i = 0; i < 5; i++) { const kk = P01(t, q.deret + .05 + i * .05, .35), ang = (-50 + i * 25) * Math.PI / 180, x0 = hx + 250 * sc * .62 + 40, y0 = hy + 250; if (kk > 0 && kk < 1) s += ln(`M${R(x0 + Math.cos(ang) * (60 + kk * 60))} ${R(y0 + Math.sin(ang) * (60 + kk * 60))}L${R(x0 + Math.cos(ang) * (110 + kk * 90))} ${R(y0 + Math.sin(ang) * (110 + kk * 90))}`, 1, K.coral, 7, { op: 1 - kk }) }
     cue(a + .1, 'puff', .5); cue(q.deret - .05, 'zap', .6);
@@ -189,7 +222,7 @@
   // 5. Лаборатория: никотин + кислота → по трубкам → кристалл соли
   function bLab(t) {
     const q = Q, a = q.lab, dk = E(t, a + .05, .9, 'o'), f1 = P01(t, q.nik - .15, .9), f2 = P01(t, q.kis - .35, .9), mix = E(t, q.kis + .15, .6), out = E(t, q.salt - .25, .7);
-    let s = bgc(K.navy) + fill(D_.poly([[-200, -200], [1280, -200], [1280, 420], [-200, 980]]), K.navy2);
+    let s = bgc(K.navy) + fill(D_.poly([[-200, -200], [1280, -200], [1280, 420], [-200, 980]]), K.navy2) + ghost('tiles', K.navy3, .3);
     const L1 = 'M270 640V720C270 800 330 820 420 820H470C520 820 540 846 540 890V930', L2 = 'M810 640V720C810 800 750 820 660 820H610C560 820 540 846 540 890V930';
     let gl = flask(270, 540, 100, { lv: .62 * (1 - f1 * .7), liq: K.amber, k: dk }) + flask(810, 540, 100, { lv: .62 * (1 - f2 * .7), liq: K.paper, k: dk }) +
       ln(L1, dk, K.paper, 6) + ln(L2, dk, K.paper, 6) + flow(L1, f1, K.amber, 12, 90) + flow(L2, f2, K.paper, 12, 90) + flask(540, 1110, 150, { lv: .15 + .5 * Math.max(f1, f2) * (1 - mix * .4), liq: mix > .5 ? K.paper2 : K.amber2, k: dk, c: K.paper }) +
@@ -209,7 +242,7 @@
     const q = Q, a = q.smooth, k1 = E(t, a + .15, 1.0), dz = E(t, q.doza - .9, 1.3, 'io');
     let s = bgc(K.paper) + fill(D_.circ(380, 900, 620), K.paper2) + ht(D_.circ(380, 900, 620), 'navy', .1);
     const air = ln(AIR, k1, K.amber, 12) + flow(AIR, (t * .8) % 1, K.paper, 6, 40);
-    s += head(330, 780, 1.36, { f: K.navy, ch: K.navy3, dot: 'navy3', air }, t);
+    s += head(330, 780, 1.36, { f: K.navy, ch: K.navy3, dot: 'navy3', air, hair: K.coral, eye: 14 }, t);
     s += g(ln('M1200 160C900 60 760 330 620 240C480 150 330 128 214 133', 1, K.amber, 12), at(330, 780, 1.36));
     const bx = 960, by0 = 1180, bh = 760;
     s += fill(D_.rr(bx - 34, by0 - bh, 68, bh, 34), K.paper2) + clip(D_.rr(bx - 34, by0 - bh, 68, bh, 34), fill(D_.rr(bx - 34, by0 - bh * (.12 + .88 * dz), 68, bh, 0), K.amber) + ht(D_.rr(bx, by0 - bh, 34, bh, 0), 'ink', .2)) + ln(D_.rr(bx - 34, by0 - bh, 68, bh, 34), 1, K.navy, 6);
@@ -222,7 +255,7 @@
   const APPLE = 'M0 -70C-40 -110 -130 -90 -130 0C-130 80 -70 130 -30 120C-12 116 -6 110 0 110C6 110 12 116 30 120C70 130 130 80 130 0C130 -90 40 -110 0 -70Z';
   function bTubes(t) {
     const q = Q, a = q.tubes, one = E(t, q.odin - .1, .5), ap = pop(t, q.yabl - .35, .55);
-    let s = bgc(K.navy) + fill(D_.poly([[-200, 2200], [-200, 1250], [1280, 700], [1280, 2200]]), K.navy2);
+    let s = bgc(K.navy) + fill(D_.poly([[-200, 2200], [-200, 1250], [1280, 700], [1280, 2200]]), K.navy2) + ghost('tiles', K.navy3, .3);
     const cnt = 30 * P01(t, a + .15, Math.max(.6, q.t30 - a + .1)), HOT = 17;
     for (let i = 0; i < 30; i++) {
       const c = i % 6, r = Math.floor(i / 6), x = 165 + c * 150, y = 560 + r * 172, p = pop(cnt, i, 1.2); if (p <= 0) continue;
@@ -241,7 +274,7 @@
   }
 
   D._ = frame;
-  window.NICF = { K, B, beat, frame, cue, bgc, ln, sh, ht, clip, hexD, pop, lab, big, flow, smokeD, cam, vape, crystal, cig, memo, head, flask, BUST, PROF, MONO, AIR, zig, APPLE,
+  window.NICF = { SKIN, SKIN2, teen, face, stamper, ghost, K, B, beat, frame, cue, bgc, ln, sh, ht, clip, hexD, pop, lab, big, flow, smokeD, cam, vape, crystal, cig, memo, head, flask, BUST, PROF, MONO, AIR, zig, APPLE,
     beats: { bHook, bTob, bMemo, bHarsh, bLab, bSmooth, bTubes }, setQ: q => { Q = q }, getQ: () => Q };
   window.EP = {
     P, D, clean: true, lead: .1, tr: {}, trDef: 'cut',

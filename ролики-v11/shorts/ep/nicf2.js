@@ -2,7 +2,7 @@
 // Азбука и предметы — из ep/nicf.js (window.NICF). Грузится после него (stage.html: loadEp).
 (function () {
   'use strict';
-  const { K, beat, cue, bgc, ln, sh, ht, clip, hexD, pop, lab, big, flow, smokeD, cam, vape, crystal, cig, memo, flask, BUST, MONO } = NICF;
+  const { SKIN, SKIN2, teen, face, stamper, ghost, K, beat, cue, bgc, ln, sh, ht, clip, hexD, pop, lab, big, flow, smokeD, cam, vape, crystal, cig, memo, flask, BUST, MONO } = NICF;
   let Q = null;
 
   // ---------- предметы ----------
@@ -33,8 +33,8 @@
   const MANGO = 'M-110 0C-118 -80 -40 -130 30 -110C110 -88 140 -10 110 60C80 120 -20 130 -70 90C-96 70 -106 40 -110 0Z';
   const mango = (x, y, s, r = 0) => s <= 0 ? '' : g(fill(MANGO, K.amber) + clip(MANGO, ht('M10 -140H150V140H10Z', 'ink', .22)) + ln('M-60 -40C-40 -76 0 -90 30 -84', 1, K.paper, 7) + fill(D_.leaf(36, -108, 90, 28, -24), K.mint) + ln('M28 -104C36 -122 40 -128 46 -136', 1, K.mint2, 7), at(x, y, s, r));
   // рука держит одноразку: back — ладонь и предплечье (за предметом), front — пальцы (перед предметом)
-  function handBack(c = K.navy) { return sh('M-30 250L170 210L420 1200H80Z', K.paper, c, 6) + sh('M40 520L250 470L300 640L80 690Z', K.coral, c, 6) + sh(D_.rr(-150, 20, 300, 300, 80), K.paper, c, 6) + sh(D_.rr(-178, 40, 70, 170, 35), K.paper, c, 6) }
-  function handFront(c = K.navy) { let q = ''; for (let i = 0; i < 4; i++) q += sh(D_.rr(-118 + i * 6, 74 + i * 60, 236 - i * 14, 54, 27), K.paper, c, 6); return q }
+  function handBack(c = K.navy) { return sh('M-10 300L190 260L440 1200H100Z', K.coral, c, 6) + sh('M-14 300L192 258L206 318L0 362Z', K.coral2, c, 6) + sh(D_.rr(-150, 20, 300, 300, 80), SKIN, c, 6) + sh(D_.rr(-178, 40, 70, 170, 35), SKIN, c, 6) }
+  function handFront(c = K.navy) { let q = ''; for (let i = 0; i < 4; i++) q += sh(D_.rr(-118 + i * 6, 74 + i * 60, 236 - i * 14, 54, 27), SKIN, c, 6); return q }
 
   // ================= БИТЫ =================
   // 8. Соль в сигареты не попала → 1979: отчёт в папку, штамп, в архив
@@ -50,6 +50,7 @@
       s += g(folder(540, fy, 1.3, -3, { inner, top: stamp('КОНФИДЕНЦИАЛЬНО', 20, 70, t, q.zasek - .05, { c: K.coral, s: 52, r: -10, ls: 3 }) }), about(540, 1000, 1 - .62 * go) + ` translate(${R(700 * go)} ${R(-240 * go)})`, 1);
       s += g(big('1979', 540, 420, K.navy, 190), '', clamp(fo * 2) * (1 - go));
     }
+    s += stamper(566, 1130, t, q.zasek - .05);
     cue(a + .1, 'swish', .5); cue(q.nep - .2, 'thud', .6); cue(q.zasek - .05, 'stamp', 1); cue(q.arch - .4, 'whoosh', .5);
     return s
   }
@@ -125,12 +126,12 @@
   const HOT = [1, 6, 8, 15];
   function bTeens(t) {
     const q = Q, a = q.teens, hk = P01(t, q.chetv - .1, .9), mk = E(t, q.rynok - .15, .7, 'o'), rk = E(t, q.rynok + .25, .6), thr = P01(t, q.zap2 - .7, .9), dn = 150 * mk;
-    let s = bgc(K.navy) + fill(D_.poly([[-200, -200], [1280, -200], [1280, 560], [-200, 1000]]), K.navy2), th = '';
+    let s = bgc(K.navy) + fill(D_.poly([[-200, -200], [1280, -200], [1280, 560], [-200, 1000]]), K.navy2) + ghost('lockers', K.navy3, .5), th = '';
     s += g(lab('США · 2019', 540, 330, K.paper, 44, { ls: 10 }), '', (1 - mk) * clamp((t - a) * 3));
     for (let i = 0; i < 16; i++) {
       const c = i % 4, r = Math.floor(i / 4), x = 150 + c * 260 + (r % 2 ? 40 : -40), y = 640 + r * 190 + dn, p = pop(t, a + .1 + i * .035, .4); if (p <= 0) continue;
       const hi = HOT.indexOf(i), hot = hi >= 0 ? clamp(hk * 4 - hi * .8) : 0;
-      s += g(fill(BUST, hot > .5 ? K.coral : K.paper2) + clip(BUST, ht('M0 -110H130V180H0Z', hot > .5 ? 'ink' : 'navy', .3)), at(x, y + 60 * (1 - p), 1.05 * (1 + .12 * Math.sin(Math.PI * clamp(hot)))));
+      s += g(fill(BUST, hot > .5 ? K.coral : K.paper2) + clip(BUST, ht('M0 -110H130V180H0Z', hot > .5 ? 'ink' : 'navy', .3)) + fill(D_.circ(0, -30, 62), SKIN) + face([K.ink, K.navy3, K.coral2, K.navy][i % 4]), at(x, y + 60 * (1 - p), 1.05 * (1 + .12 * Math.sin(Math.PI * clamp(hot)))));
       if (hot > .5) { s += ln(smokeD(x + 60, y - 30, 120, t + i, 14, 30, 10), clamp(hot * 2 - 1), K.paper, 5); if (thr > 0) th += ln(`M540 520C${540 + (x - 540) * .3} ${700 + dn} ${x} ${y - 260} ${x} ${y - 96}`, clamp(thr * 1.6 - hi * .15), K.coral, 6) }
     }
     if (mk > 0) s += th + memo(540, lerp(-500, 400, mk), .62, lerp(-14, 4, mk), { ring: rk, st: true }, t);
@@ -171,6 +172,7 @@
   function bYou(t) {
     const q = Q, a = q.you, one = E(t, q.kazh - .2, .8), hd = E(t, q.vybr - .35, .7, 'o'), st = P01(t, q.no - .1, .7), up = E(t, q.ran - .15, .9) - E(t, q.nuchto - .35, .9), fin = E(t, q.vruke - .1, .9), pan = 720 * up;
     let s = bgc(K.navy) + fill(D_.circ(540, 860, lerp(520, 470, fin)), K.navy2);
+    s += g(ghost('shelves', K.navy3, .7), '', 1 - one);
     // полка: 8 одноразок, в 7 — соль
     if (one < 1) for (let i = 0; i < 8; i++) {
       if (i === 5) continue; const c = i % 4, r = Math.floor(i / 4), x = 165 + c * 250, y = 600 + r * 520, p = pop(t, a + .05 + i * .05, .4), has = i !== 2, kx = has ? clamp((t - (q.sol - .2) - i * .07) * 3) : 0;
@@ -183,12 +185,13 @@
     if (up > 0 || st > 0) {
       w += g(big('1973', 290, -380, K.coral, 130) + memo(770, -330, .62, 6, { ring: 1, st: true }, t), '', clamp(up * 3 + .001));
       const k3 = EZ.io(st), sway = wob(t, .35, 10);
-      [[-90, 330, 680], [10, 150, 770], [110, 420, 830]].forEach(([dx, hy, x0], i) => { w += ln(`M${x0} -120C${x0 + sway} 300 ${vx + dx - sway} 400 ${vx + dx} ${vy + hy}`, clamp(k3 * 1.3 - i * .12), K.coral, 6, { op: 1 - fin }) });
+      [[-90, 330, 680], [10, 150, 770], [110, 420, 830], [-270, 100, 620]].forEach(([dx, hy, x0], i) => { w += ln(`M${x0} -120C${x0 + sway} 300 ${vx + dx - sway} 400 ${vx + dx} ${vy + hy}`, clamp(k3 * 1.3 - i * .12), K.coral, 6, { op: 1 - fin }) });
     }
     // рука + одноразка (i = 5 — «наша»)
     const p5 = pop(t, a + .3, .4), hy = 1500 * (1 - hd);
     let hv = '';
-    if (hd > 0) hv += g(NICF2H.back(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
+    const lk = [1 - up - fin, -.7 - .3 * up + .7 * fin];
+    if (hd > 0) hv += teen(270, 1210 + hy, 1.7, { look: lk, m: st > .5 && fin < .5 ? -1 : 0 }) + g(NICF2H.back(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
     hv += vape(vx, vy, vs * (one > 0 ? 1 : p5), vr, { x: 1 - one, f: K.amber, in: K.navy3 });
     if (hd > 0) hv += g(NICF2H.front(), at(vx + 40, vy + 20 + hy, vs / 1.3 * 1.25, 0));
     const mgp = pop(t, q.mango2 - .3, .5) * (1 - E(t, q.no - .2, .4));
