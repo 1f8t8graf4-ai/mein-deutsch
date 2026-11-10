@@ -17,6 +17,7 @@ async function page() {
   const p = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   p.on('pageerror', e => errs.push(String(e))); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()) });
   await p.goto('file://' + path.join(here, 'stage.html'));
+  await p.evaluate(f => { window.FMT = f }, process.env.FMT || '');   // формат кадра: FMT=9x16 — вертикаль, иначе как задано в ролике
   await p.evaluate(ep => window.loadEp(ep), ep.replace(/-(en|ru)$/, ''));
   await p.evaluate(async () => {
     for (const f of ['600 10px M', '800 10px M', '500 10px O', '700 10px O', '700 10px U', '800 10px U']) { await document.fonts.load(f, 'aя'); }
@@ -42,7 +43,7 @@ if (mode === 'cues') {
 } else {
   const fps = Number(arg || 30), N = Math.ceil(TL.dur * fps), K = Number(tabsArg || 4);
   const P = await Promise.all([...Array(K)].map(page));
-  const outf = path.join(OUT, 'video.mp4');
+  const outf = path.join(OUT, `video${process.env.FMT ? '-' + process.env.FMT : ''}.mp4`);
   const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18',
     '-pix_fmt', 'yuv420p', '-r', String(fps), outf], { stdio: ['pipe', 'inherit', 'inherit'] });
   const t0 = Date.now();

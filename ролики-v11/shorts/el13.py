@@ -21,6 +21,8 @@ SFX = {  # имя (как в cue() рисовки) → (описание, дли
     'ding':   ('small glass crystal chime, single bright note, short', 1.0),
     'puff':   ('short soft exhale of vapor, breathy puff', 0.8),
     'scuttle': ('several metal filing cabinet drawers sliding open one after another', 1.8),
+    'vape':   ('person inhaling from an electronic vape pen, soft crackling hiss of the coil, close-up, quiet room', 1.6),
+    'bubble': ('liquid bubbling and fizzing in a glass laboratory flask, chemical reaction, close-up', 1.6),
 }
 
 def opt(a, k, d=None): return a[a.index(k) + 1] if k in a else d
@@ -41,7 +43,7 @@ def post(path, body, tries=3):
 def voice(ep, a):
     import tts
     from scripts import EPISODES, parse
-    L = tts.lines(ep); text = tts.el_text(ep, L, False); vid = opt(a, '--voice', BELL); model = opt(a, '--model', 'eleven_multilingual_v2')
+    model = opt(a, '--model', 'eleven_multilingual_v2'); L = tts.lines(ep); text = tts.el_text(ep, L, model in ('eleven_v3', 'eleven_v4')); vid = opt(a, '--voice', BELL)
     vs = {'stability': float(opt(a, '--stab', '.45')), 'similarity_boost': .75, 'style': float(opt(a, '--style', '.3')), 'speed': float(opt(a, '--speed', '1.0'))}
     body = {'text': text, 'model_id': model, 'voice_settings': vs}
     if opt(a, '--seed'): body['seed'] = int(opt(a, '--seed'))
@@ -59,7 +61,11 @@ def build(ep):
     y = np.frombuffer(raw, np.float32).copy(); y = np.concatenate([np.zeros(int(LEAD * SR), np.float32), y / (np.max(np.abs(y)) or 1) * .9, np.zeros(int(1.2 * SR), np.float32)])
     sf.write(os.path.join(out, 'voice.wav'), y, SR)
     W, cur = [], None   # слово = кусок без пробелов, в котором есть буква или цифра (отдельное тире — не слово)
+    dep = 0
     for ch, a0, b0 in list(zip(al['characters'], al['character_start_times_seconds'], al['character_end_times_seconds'])) + [(' ', 0, 0)]:
+        if ch == '[': dep += 1; continue      # пометки эмоций [serious] — не слова
+        if ch == ']': dep = max(0, dep - 1); continue
+        if dep: continue
         if ch.isspace():
             if cur and cur[2]: W.append(cur[:2])
             cur = None
@@ -101,6 +107,20 @@ def music(ep):
     r = post('/v1/music', {'prompt': prompt, 'music_length_ms': int((dur + 1) * 1000)})
     f = os.path.join(HERE, 'music', ep.rsplit('-', 1)[0] + '-raw.mp3'); open(f, 'wb').write(r.content); print('музыка →', f, len(r.content) // 1024, 'КБ')
 
+def demon(ep):
+    """Демонический слой на последнюю фразу («Признайтесь…»): чистый голос + слой на −4 полутона + слой на −8 с тёмным эхом; нарастает к последнему слову.
+    Основной голос не трогается (никакого растяжения): слои подмешиваются под него. voice.clean.wav — запас без эффекта."""
+    out = os.path.join(HERE, 'out', ep); tl = json.load(open(os.path.join(out, 'timeline.json'))); last = tl['sent'][-1]
+    src = os.path.join(out, 'voice.clean.wav'); v = os.path.join(out, 'voice.wav')
+    if not os.path.exists(src): os.replace(v, src)
+    t0 = max(0, last['a'] - .08); d = last['b'] - t0; w = last['words'][-2]['a'] - t0   # слои на полную — к «захотелось»
+    fg = (f"[0:a]atrim=0:{t0:.3f},asetpts=PTS-STARTPTS[head];[0:a]atrim={t0:.3f},asetpts=PTS-STARTPTS,asplit=3[main][mid][sub];"
+          f"[mid]asetrate=44100*0.7937,aresample=44100,atempo=1.2599,lowpass=f=1800,chorus=0.5:0.9:50|60:0.4|0.32:0.25|0.4:2|1.3,volume=0.55,afade=t=in:st=0:d={max(.3, w):.2f}[dm];"
+          f"[sub]asetrate=44100*0.63,aresample=44100,atempo=1.5874,lowpass=f=750,aecho=0.8:0.9:55|110:0.45|0.35,volume=0.9,afade=t=in:st=0:d={max(.3, w):.2f}[dsb];"
+          f"[main][dm][dsb]amix=inputs=3:duration=longest:normalize=0,alimiter=limit=0.95[tail];[head][tail]concat=n=2:v=0:a=1[o]")
+    subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', src, '-filter_complex', fg, '-map', '[o]', '-ar', '44100', '-ac', '1', v], check=True)
+    print(ep, 'демонический слой с', round(t0, 2), 'с, длина фразы', round(d, 2), 'с')
+
 if __name__ == '__main__':
     a = sys.argv[1:]
-    {'voice': lambda: voice(a[1], a), 'build': lambda: build(a[1]), 'sfx': sfx, 'music': lambda: music(a[1])}[a[0]]()
+    {'voice': lambda: voice(a[1], a), 'build': lambda: build(a[1]), 'sfx': sfx, 'music': lambda: music(a[1]), 'demon': lambda: demon(a[1])}[a[0]]()
